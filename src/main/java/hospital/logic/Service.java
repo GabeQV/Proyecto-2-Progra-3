@@ -1,7 +1,8 @@
 package hospital.logic;
 
-import hospital.data.Data;
-import hospital.data.XmlPersister;
+import hospital.data.*;
+import hospital.data.MedicoDao;
+
 
 import java.util.List;
 
@@ -13,75 +14,55 @@ public class Service {
         return theInstance;
     }
 
-    private Data data;
+    private MedicoDao medicoDao;
+    private FarmaceutaDao  farmaceutaDao;
+    private PacienteDao pacienteDao;
+    private RecetasDao recetasDao;
+    private MedicamentosDao  medicamentosDao;
 
     private Service(){
         try{
-            data= XmlPersister.instance().load();
+            medicoDao =new MedicoDao();
+            farmaceutaDao =new FarmaceutaDao();
+            pacienteDao =new PacienteDao();
+            recetasDao = new RecetasDao();
+            medicamentosDao = new MedicamentosDao();
         }
         catch(Exception e){
-            data =  new Data();
+            System.exit(-1);
         }
     }
 
     public void stop(){
         try {
-            XmlPersister.instance().store(data);
+            Database.instance().close();
         } catch (Exception e) {
-            System.out.println("Error al guardar los datos " + e.getMessage());
+            System.out.println(e);
         }
     }
 
     // =============== MEDICOS ===============
     public void createMedico(Medico e) throws Exception {
-        Medico result = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(e.getId()))
-                .findFirst()
-                .orElse(null);
-        if (result == null) {
-            data.getMedicos().add(e);
-        } else {
-            throw new Exception("Medico ya existe");
-        }
+        medicoDao.create(e);
     }
 
     public Medico readMedico(Medico e) throws Exception {
-        Medico result = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(e.getId()))
-                .findFirst()
-                .orElse(null);
-        if (result != null) {
-            return result;
-        } else {
-            throw new Exception("Medico no existe");
-        }
+        return  medicoDao.read(e.getId());
     }
 
     public void deleteMedico(Medico e) throws Exception {
-        Medico result = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(e.getId()))
-                .findFirst()
-                .orElse(null);
-        if (result != null) {
-            data.getMedicos().remove(result);
-        } else {
-            throw new Exception("Medico no existe");
-        }
+        medicoDao.delete(e);
     }
 
     public void updateMedico(Medico e) throws Exception {
-        Medico found = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(e.getId()))
-                .findFirst()
-                .orElse(null);
-        if (found == null) throw new Exception("Medico no existe");
-        found.setNombre(e.getNombre());
-        found.setEspecialidad(e.getEspecialidad());
+        medicoDao.update(e);
         stop();
     }
 
-    public List<Medico> findAllMedicos() {
-        return data.getMedicos();
+    public List<Medico> findAll() {
+        Medico filtro = new Medico();
+        filtro.setNombre("");
+        return medicoDao.findByNombre(filtro);
     }
 
 
