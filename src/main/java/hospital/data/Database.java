@@ -9,9 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
-
 
 public class Database {
     private static Database theInstance;
@@ -53,21 +51,22 @@ public class Database {
     public PreparedStatement prepareStatement(String statement) throws SQLException {
         return cnx.prepareStatement(statement);
     }
+
     public int executeUpdate(PreparedStatement statement) {
         try {
             statement.executeUpdate();
             return statement.getUpdateCount();
         } catch (SQLException ex) {
-            return 0;
+            throw new RuntimeException(ex); // No silenciar
         }
     }
+
     public ResultSet executeQuery(PreparedStatement statement){
         try {
             return statement.executeQuery();
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex); // No devolver null
         }
-        return null;
     }
 
     public void close() throws Exception{

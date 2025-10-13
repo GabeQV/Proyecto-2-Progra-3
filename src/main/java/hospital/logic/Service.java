@@ -1,13 +1,12 @@
 package hospital.logic;
 
 import hospital.data.*;
-import hospital.data.MedicoDao;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class Service {
@@ -48,209 +47,180 @@ public class Service {
     public void createMedico(Medico e) throws Exception {
         medicoDao.create(e);
     }
-
     public Medico readMedico(Medico e) throws Exception {
         return medicoDao.read(e.getId());
     }
-
     public void deleteMedico(Medico e) throws Exception {
         medicoDao.delete(e);
     }
-
     public void updateMedico(Medico e) throws Exception {
         medicoDao.update(e);
         stop();
     }
-
     public List<Medico> findAllMedicos() {
         Medico filtro = new Medico();
         filtro.setNombre("");
         return medicoDao.findByNombre(filtro);
     }
 
-
     // =============== FARMACEUTAS ===============
     public void createFarmaceuta(Farmaceuta e) throws Exception {
         farmaceutaDao.create(e);
     }
-
     public Farmaceuta readFarmaceuta(Farmaceuta e) throws Exception {
         return farmaceutaDao.read(e.getId());
     }
-
     public void deleteFarmaceuta(Farmaceuta e) throws Exception {
         farmaceutaDao.delete(e);
     }
-
     public void updateFarmaceuta(Farmaceuta e) throws Exception {
         farmaceutaDao.update(e);
         stop();
     }
-
     public List<Farmaceuta> findAllFarmaceutas() {
         Farmaceuta filtro = new Farmaceuta();
         filtro.setNombre("");
         return farmaceutaDao.findByNombre(filtro);
     }
 
-
     // =============== PACIENTES ===============
     public void createPaciente(Paciente e) throws Exception {
         pacienteDao.create(e);
     }
-
     public Paciente readPaciente(Paciente e) throws Exception {
         return pacienteDao.read(e.getId());
     }
-
     public void deletePaciente(Paciente e) throws Exception {
         pacienteDao.delete(e);
     }
-
     public void updatePaciente(Paciente e) throws Exception {
         pacienteDao.update(e);
         stop();
     }
-
     public List<Paciente> findAllPacientes() {
         Paciente filtro = new Paciente();
         filtro.setNombre("");
         return pacienteDao.findByNombre(filtro);
     }
 
-
     // =============== RECETAS ===============
     public void createReceta(Receta e) throws Exception {
+        recetasDao.create(e);
     }
-
-    //public Receta readReceta(Receta e) throws Exception {}
-
+    public Receta readReceta(Receta e) throws Exception {
+        return recetasDao.read(e.getId());
+    }
     public void deleteRecetas(Receta e) throws Exception {
+        recetasDao.delete(e);
     }
-
-    //public List<Receta> findAllRecetas() {}
-
-    //public List<Receta> findRecetasByPacienteId(String pacienteId) {}
-
+    public List<Receta> findAllRecetas() {
+        return recetasDao.findAll();
+    }
+    public List<Receta> findRecetasByPacienteId(String pacienteId) {
+        return recetasDao.buscarPorPaciente(pacienteId);
+    }
     public void updateReceta(Receta r) throws Exception {
-
+        recetasDao.update(r);
     }
-
-    //public boolean findRecetaById(String id) {}
+    public boolean findRecetaById(String id) {
+        try {
+            recetasDao.read(id);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 
     // =============== MEDICAMENTOS ===============
     public void createMedicamento(Medicamento e) throws Exception {
         medicamentosDao.create(e);
     }
-
     public Medicamento readMedicamento(Medicamento e) throws Exception {
         return medicamentosDao.read(e.getId());
     }
-
     public void deleteMedicamento(Medicamento e) throws Exception {
         medicamentosDao.delete(e);
     }
-
     public void updateMedicamento(Medicamento e) throws Exception {
         medicamentosDao.update(e);
         stop();
     }
-
     public List<Medicamento> findMedicamentosByNombre(String nombre) {
         Medicamento filtro = new Medicamento();
         filtro.setNombre(nombre);
         return medicamentosDao.findByNombre(filtro);
     }
-
-    //public List<Medicamento> findMedicamentosByCodigo(String codigo) {}
-
+    public List<Medicamento> findMedicamentosByCodigo(String codigo) {
+        try {
+            Medicamento m = medicamentosDao.read(codigo);
+            return java.util.List.of(m);
+        } catch (Exception ex) {
+            return Collections.emptyList();
+        }
+    }
     public List<Medicamento> findAllMedicamentos() {
         Medicamento filtro = new Medicamento();
         filtro.setNombre("");
         return medicamentosDao.findByNombre(filtro);
     }
 
-
     // =============== AUTENTICACIÓN Y CONTRASEÑA ===============
-    public Usuario login(String id, String clave) throws Exception {
-        // ADMIN hardcodeado
-        if ("ADM".equals(id) && "ADM".equals(clave)) {
-            return new Admin(); // Puedes setear más datos si hace falta
-        }
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Usuario user = null;
+    public Usuario login(String id, String clave) throws Exception {
+        // Admin local
+        if ("ADM".equals(id) && "ADM".equals(clave)) return new Admin();
+
+        java.sql.Connection conn = null;
+        java.sql.PreparedStatement stmt = null;
+        java.sql.ResultSet rs = null;
 
         try {
-            conn = Database.instance().getConnection(); // Usa tu clase de conexión (te dejo ejemplo abajo)
+            conn = Database.instance().getConnection();
 
-            // Buscamos primero en tabla de Médicos
-            String sql = "SELECT * FROM medicos WHERE idUsuario = ? AND clave = ?";
+            // 1) Credenciales en usuarios
+            String sql = "SELECT nombreUsuario FROM usuarios WHERE idUsuario = ? AND claveUsuario = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, id);
             stmt.setString(2, clave);
             rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                user = new Medico();
-                user.setId(rs.getString("idUsuario"));
-                user.setNombre(rs.getString("nombre"));
-                user.setClave(rs.getString("clave"));
-                // set otros campos si los hay
-            }
-
-            // Si no se encontró en médicos, buscar en farmaceutas
-            if (user == null) {
-                rs.close();
-                stmt.close();
-
-                sql = "SELECT * FROM farmaceutas WHERE idUsuario = ? AND clave = ?";
-                stmt = conn.prepareStatement(sql);
-                stmt.setString(1, id);
-                stmt.setString(2, clave);
-                rs = stmt.executeQuery();
-
-                if (rs.next()) {
-                    user = new Farmaceuta();
-                    user.setId(rs.getString("idUsuario"));
-                    user.setNombre(rs.getString("nombre"));
-                    user.setClave(rs.getString("clave"));
-                    // set otros campos
-                }
-            }
-
-            if (user == null) {
+            if (!rs.next()) {
                 throw new Exception("Usuario o clave incorrecta");
             }
+            String nombre = rs.getString("nombreUsuario");
+            rs.close(); stmt.close();
 
-            return user;
+            // 2) ¿Es médico?
+            sql = "SELECT especialidad FROM medicos WHERE usuarios_idUsuario = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                String esp = rs.getString("especialidad");
+                return new Medico(id, clave, nombre, esp != null ? esp : "");
+            }
+            rs.close(); stmt.close();
 
-        } catch (SQLException e) {
+            // 3) ¿Es farmaceuta?
+            sql = "SELECT 1 FROM farmaceutas WHERE usuarios_idUsuario = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Farmaceuta(id, clave, nombre);
+            }
+
+            throw new Exception("El usuario no tiene un rol asignado (médico o farmaceuta).");
+        } catch (java.sql.SQLException e) {
             e.printStackTrace();
             throw new Exception("Error de base de datos: " + e.getMessage());
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException ignored) {
-            }
-            if (stmt != null) try {
-                stmt.close();
-            } catch (SQLException ignored) {
-            }
-            if (conn != null) try {
-                conn.close();
-            } catch (SQLException ignored) {
-            }
+            if (rs != null) try { rs.close(); } catch (java.sql.SQLException ignored) {}
+            if (stmt != null) try { stmt.close(); } catch (java.sql.SQLException ignored) {}
+            if (conn != null) try { conn.close(); } catch (java.sql.SQLException ignored) {}
         }
     }
-
     public void cambiarClave(String id, String claveActual, String nuevaClave, String nuevaClaveConfirm) throws Exception {
-
-        if ("ADM".equals(id)) {
-            throw new Exception("No es posible cambiar la clave del administrador.");
-        }
+        if ("ADM".equals(id)) throw new Exception("No es posible cambiar la clave del administrador.");
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -264,19 +234,11 @@ public class Service {
             stmt.setString(1, id);
             rs = stmt.executeQuery();
 
-            if (!rs.next()) {
-                throw new Exception("Usuario no encontrado");
-            }
+            if (!rs.next()) throw new Exception("Usuario no encontrado");
 
             String claveBD = rs.getString("claveUsuario");
-
-            if (!claveBD.equals(claveActual)) {
-                throw new Exception("La clave actual no es correcta");
-            }
-
-            if (!nuevaClave.equals(nuevaClaveConfirm)) {
-                throw new Exception("La nueva clave no coincide");
-            }
+            if (!claveBD.equals(claveActual)) throw new Exception("La clave actual no es correcta");
+            if (!nuevaClave.equals(nuevaClaveConfirm)) throw new Exception("La nueva clave no coincide");
 
             rs.close();
             stmt.close();
@@ -287,28 +249,15 @@ public class Service {
             stmt.setString(2, id);
 
             int filas = stmt.executeUpdate();
-
-            if (filas == 0) {
-                throw new Exception("No se pudo actualizar la clave.");
-            }
+            if (filas == 0) throw new Exception("No se pudo actualizar la clave.");
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Error de base de datos: " + e.getMessage());
         } finally {
-            if (rs != null) try {
-                rs.close();
-            } catch (SQLException ignored) {
-            }
-            if (stmt != null) try {
-                stmt.close();
-            } catch (SQLException ignored) {
-            }
-            if (conn != null) try {
-                conn.close();
-            } catch (SQLException ignored) {
-            }
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (stmt != null) try { stmt.close(); } catch (SQLException ignored) {}
+            if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
         }
     }
 }
-
