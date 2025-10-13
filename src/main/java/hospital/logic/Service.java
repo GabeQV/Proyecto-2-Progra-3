@@ -4,6 +4,10 @@ import hospital.data.*;
 import hospital.data.MedicoDao;
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Service {
@@ -15,25 +19,24 @@ public class Service {
     }
 
     private MedicoDao medicoDao;
-    private FarmaceutaDao  farmaceutaDao;
+    private FarmaceutaDao farmaceutaDao;
     private PacienteDao pacienteDao;
     private RecetasDao recetasDao;
-    private MedicamentosDao  medicamentosDao;
+    private MedicamentosDao medicamentosDao;
 
-    private Service(){
-        try{
-            medicoDao =new MedicoDao();
-            farmaceutaDao =new FarmaceutaDao();
-            pacienteDao =new PacienteDao();
+    private Service() {
+        try {
+            medicoDao = new MedicoDao();
+            farmaceutaDao = new FarmaceutaDao();
+            pacienteDao = new PacienteDao();
             recetasDao = new RecetasDao();
             medicamentosDao = new MedicamentosDao();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.exit(-1);
         }
     }
 
-    public void stop(){
+    public void stop() {
         try {
             Database.instance().close();
         } catch (Exception e) {
@@ -47,7 +50,7 @@ public class Service {
     }
 
     public Medico readMedico(Medico e) throws Exception {
-        return  medicoDao.read(e.getId());
+        return medicoDao.read(e.getId());
     }
 
     public void deleteMedico(Medico e) throws Exception {
@@ -72,7 +75,7 @@ public class Service {
     }
 
     public Farmaceuta readFarmaceuta(Farmaceuta e) throws Exception {
-        return  farmaceutaDao.read(e.getId());
+        return farmaceutaDao.read(e.getId());
     }
 
     public void deleteFarmaceuta(Farmaceuta e) throws Exception {
@@ -117,11 +120,13 @@ public class Service {
 
 
     // =============== RECETAS ===============
-    public void createReceta(Receta e) throws Exception {}
+    public void createReceta(Receta e) throws Exception {
+    }
 
     //public Receta readReceta(Receta e) throws Exception {}
 
-    public void deleteRecetas(Receta e) throws Exception {}
+    public void deleteRecetas(Receta e) throws Exception {
+    }
 
     //public List<Receta> findAllRecetas() {}
 
@@ -168,56 +173,142 @@ public class Service {
 
     // =============== AUTENTICACIÓN Y CONTRASEÑA ===============
     public Usuario login(String id, String clave) throws Exception {
-
+        // ADMIN hardcodeado
         if ("ADM".equals(id) && "ADM".equals(clave)) {
-            return new Admin();
+            return new Admin(); // Puedes setear más datos si hace falta
         }
 
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         Usuario user = null;
 
-        user = data.getMedicos().stream()
-                .filter(u -> u.getId().equals(id) && u.getClave().equals(clave))
-                .findFirst()
-                .orElse(null);
+        try {
+            conn = Database.instance().getConnection(); // Usa tu clase de conexión (te dejo ejemplo abajo)
 
-        if (user == null) {
-            user = data.getFarmaceutas().stream()
-                    .filter(u -> u.getId().equals(id) && u.getClave().equals(clave))
-                    .findFirst()
-                    .orElse(null);
+            // Buscamos primero en tabla de Médicos
+            String sql = "SELECT * FROM medicos WHERE idUsuario = ? AND clave = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            stmt.setString(2, clave);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                user = new Medico();
+                user.setId(rs.getString("idUsuario"));
+                user.setNombre(rs.getString("nombre"));
+                user.setClave(rs.getString("clave"));
+                // set otros campos si los hay
+            }
+
+            // Si no se encontró en médicos, buscar en farmaceutas
+            if (user == null) {
+                rs.close();
+                stmt.close();
+
+                sql = "SELECT * FROM farmaceutas WHERE idUsuario = ? AND clave = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, id);
+                stmt.setString(2, clave);
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    user = new Farmaceuta();
+                    user.setId(rs.getString("idUsuario"));
+                    user.setNombre(rs.getString("nombre"));
+                    user.setClave(rs.getString("clave"));
+                    // set otros campos
+                }
+            }
+
+            if (user == null) {
+                throw new Exception("Usuario o clave incorrecta");
+            }
+
+            return user;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Error de base de datos: " + e.getMessage());
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException ignored) {
+            }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException ignored) {
+            }
+            if (conn != null) try {
+                conn.close();
+            } catch (SQLException ignored) {
+            }
         }
-
-        if (user == null) throw new Exception("Usuario o clave incorrecta");
-
-        return user;
     }
 
     public void cambiarClave(String id, String claveActual, String nuevaClave, String nuevaClaveConfirm) throws Exception {
 
         if ("ADM".equals(id)) {
-            throw new Exception("No es posible cambiar la clave del administrador especial.");
+            throw new Exception("No es posible cambiar la clave del administrador.");
         }
 
-        Usuario user = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-        user = data.getMedicos().stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        try {
+            conn = Database.instance().getConnection();
 
-        if (user == null) user = data.getFarmaceutas().stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+            String sql = "SELECT claveUsuario FROM usuarios WHERE idUsuario = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, id);
+            rs = stmt.executeQuery();
 
-        if (user == null) throw new Exception("Usuario no encontrado");
+            if (!rs.next()) {
+                throw new Exception("Usuario no encontrado");
+            }
 
-        if (!user.getClave().equals(claveActual)) throw new Exception("La clave actual no es correcta");
+            String claveBD = rs.getString("claveUsuario");
 
-        if (!nuevaClave.equals(nuevaClaveConfirm)) throw new Exception("La nueva clave no coincide");
+            if (!claveBD.equals(claveActual)) {
+                throw new Exception("La clave actual no es correcta");
+            }
 
-        user.setClave(nuevaClave);
-        stop();
+            if (!nuevaClave.equals(nuevaClaveConfirm)) {
+                throw new Exception("La nueva clave no coincide");
+            }
+
+            rs.close();
+            stmt.close();
+
+            sql = "UPDATE usuarios SET claveUsuario = ? WHERE idUsuario = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nuevaClave);
+            stmt.setString(2, id);
+
+            int filas = stmt.executeUpdate();
+
+            if (filas == 0) {
+                throw new Exception("No se pudo actualizar la clave.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Error de base de datos: " + e.getMessage());
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException ignored) {
+            }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException ignored) {
+            }
+            if (conn != null) try {
+                conn.close();
+            } catch (SQLException ignored) {
+            }
+        }
     }
-
 }
+
