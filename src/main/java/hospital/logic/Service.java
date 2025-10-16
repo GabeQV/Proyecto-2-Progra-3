@@ -177,7 +177,6 @@ public class Service {
         try {
             conn = Database.instance().getConnection();
 
-            // 1) Credenciales en usuarios
             String sql = "SELECT nombreUsuario FROM usuarios WHERE idUsuario = ? AND claveUsuario = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, id);
@@ -189,7 +188,6 @@ public class Service {
             String nombre = rs.getString("nombreUsuario");
             rs.close(); stmt.close();
 
-            // 2) ¿Es médico?
             sql = "SELECT especialidad FROM medicos WHERE usuarios_idUsuario = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, id);
@@ -200,7 +198,6 @@ public class Service {
             }
             rs.close(); stmt.close();
 
-            // 3) ¿Es farmaceuta?
             sql = "SELECT 1 FROM farmaceutas WHERE usuarios_idUsuario = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, id);
