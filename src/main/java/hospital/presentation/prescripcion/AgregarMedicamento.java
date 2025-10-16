@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public class AgregarMedicamento extends JDialog implements PropertyChangeListener {
     private JPanel contentPane;
@@ -70,6 +71,32 @@ public class AgregarMedicamento extends JDialog implements PropertyChangeListene
                 }
             }
         });
+
+        textField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                buscarMedicamentos();
+            }
+        });
+        comboBox1.addActionListener(e -> buscarMedicamentos());
+    }
+
+    private void buscarMedicamentos() {
+        String criterio = textField1.getText();
+        String tipoBusqueda = (String) comboBox1.getSelectedItem();
+        List<Medicamento> result;
+
+        if (criterio.isEmpty()) {
+            result = Service.instance().findAllMedicamentos();
+        } else {
+            if ("Nombre".equals(tipoBusqueda)) {
+                result = Service.instance().findMedicamentosByNombre(criterio);
+            } else { // "Codigo"
+                result = Service.instance().findMedicamentosByCodigo(criterio);
+            }
+        }
+        int[] cols = {MedicamentosTableModel.ID, MedicamentosTableModel.NOMBRE, MedicamentosTableModel.PRESENTACION};
+        medicamentosTable.setModel(new MedicamentosTableModel(cols, result));
     }
 
     private void onOK() {

@@ -1,9 +1,6 @@
 package hospital.data;
 
-import hospital.logic.Receta;
-import hospital.logic.Usuario;
-import hospital.logic.Paciente;
-import hospital.logic.Medicamento;
+import hospital.logic.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +38,16 @@ public class RecetasDao {
     }
 
     public Receta read(String id) throws Exception {
-        String sql = "SELECT * FROM recetas WHERE idRecetas = ?";
+        String sql = "SELECT " +
+                "r.idRecetas, r.indicaciones, r.cantidad, r.duracion, r.estado, r.fecha, " +
+                "med.idMedicamento AS med_id, med.nombreMedicamento AS med_nombre, med.presentacionMedicamento AS med_presentacion, " +
+                "pac.idPaciente AS pac_id, pac.nombrePaciente AS pac_nombre, " +
+                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre " +
+                "FROM recetas r " +
+                "JOIN medicamentos med ON r.medicamentos_idMedicamento = med.idMedicamento " +
+                "JOIN pacientes pac ON r.pacientes_idPaciente = pac.idPaciente " +
+                "JOIN usuarios usr ON r.usuarios_idusuarios = usr.idUsuario " +
+                "WHERE r.idRecetas = ?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, id);
         ResultSet rs = db.executeQuery(stm);
@@ -86,27 +92,51 @@ public class RecetasDao {
 
     public List<Receta> buscarPorPaciente(String idPaciente) {
         List<Receta> resultado = new ArrayList<>();
+        String sql = "SELECT " +
+                "r.idRecetas, r.indicaciones, r.cantidad, r.duracion, r.estado, r.fecha, " +
+                "med.idMedicamento AS med_id, med.nombreMedicamento AS med_nombre, med.presentacionMedicamento AS med_presentacion, " +
+                "pac.idPaciente AS pac_id, pac.nombrePaciente AS pac_nombre, " +
+                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre " +
+                "FROM recetas r " +
+                "JOIN medicamentos med ON r.medicamentos_idMedicamento = med.idMedicamento " +
+                "JOIN pacientes pac ON r.pacientes_idPaciente = pac.idPaciente " +
+                "JOIN usuarios usr ON r.usuarios_idusuarios = usr.idUsuario " +
+                "WHERE r.pacientes_idPaciente = ?";
         try {
-            String sql = "SELECT * FROM recetas WHERE pacientes_idPaciente = ?";
             PreparedStatement stm = db.prepareStatement(sql);
             stm.setString(1, idPaciente);
             ResultSet rs = db.executeQuery(stm);
             while (rs.next()) {
-                resultado.add(from(rs));
+                Receta receta = from(rs);
+                if (receta != null) {
+                    resultado.add(receta);
+                }
             }
-        } catch (SQLException ex) { }
+        } catch (SQLException ex) { ex.printStackTrace(); }
         return resultado;
     }
+
     public List<Receta> findAll() {
         List<Receta> resultado = new ArrayList<>();
+        String sql = "SELECT " +
+                "r.idRecetas, r.indicaciones, r.cantidad, r.duracion, r.estado, r.fecha, " +
+                "med.idMedicamento AS med_id, med.nombreMedicamento AS med_nombre, med.presentacionMedicamento AS med_presentacion, " +
+                "pac.idPaciente AS pac_id, pac.nombrePaciente AS pac_nombre, " +
+                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre " +
+                "FROM recetas r " +
+                "JOIN medicamentos med ON r.medicamentos_idMedicamento = med.idMedicamento " +
+                "JOIN pacientes pac ON r.pacientes_idPaciente = pac.idPaciente " +
+                "JOIN usuarios usr ON r.usuarios_idusuarios = usr.idUsuario";
         try {
-            String sql = "SELECT * FROM recetas";
             PreparedStatement stm = db.prepareStatement(sql);
             ResultSet rs = db.executeQuery(stm);
             while (rs.next()) {
-                resultado.add(from(rs));
+                Receta receta = from(rs);
+                if (receta != null) {
+                    resultado.add(receta);
+                }
             }
-        } catch (SQLException ex) { }
+        } catch (SQLException ex) { ex.printStackTrace(); }
         return resultado;
     }
 
@@ -121,19 +151,24 @@ public class RecetasDao {
             r.setFecha(rs.getObject("fecha", LocalDate.class));
 
             Medicamento m = new Medicamento();
-            m.setId(rs.getString("medicamentos_idMedicamento"));
+            m.setId(rs.getString("med_id"));
+            m.setNombre(rs.getString("med_nombre"));
+            m.setPresentacion(rs.getString("med_presentacion"));
             r.setMedicamento(m);
 
             Paciente p = new Paciente();
-            p.setId(rs.getString("pacientes_idPaciente"));
+            p.setId(rs.getString("pac_id"));
+            p.setNombre(rs.getString("pac_nombre"));
             r.setPaciente(p);
 
-            //Usuario u = new Usuario();
-            //u.setId(rs.getString("usuarios_idusuarios"));
-            //r.setUsuario(u);
+            Medico u = new Medico();
+            u.setId(rs.getString("usr_id"));
+            u.setNombre(rs.getString("usr_nombre"));
+            r.setUsuario(u);
 
             return r;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return null;
         }
     }

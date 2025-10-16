@@ -4,6 +4,8 @@ package hospital.presentation.historico_recetas;
 import hospital.logic.Receta;
 import hospital.logic.Service;
 
+import java.util.List;
+
 public class Controller {
     HistoricoRecetasView view;
     Model model;
@@ -36,34 +38,35 @@ public class Controller {
     }
 
     public void clear() {
+        model.setList(Service.instance().findAllRecetas());
         model.setCurrent(new Receta());
     }
 
-    public void searchByPacienteId(String pacienteId) {
-        java.util.List<Receta> list = Service.instance().findRecetasByPacienteId(pacienteId);
+    public boolean searchByPacienteId(String pacienteId) {
+        List<Receta> list = Service.instance().findRecetasByPacienteId(pacienteId);
         model.setList(list);
         if (!list.isEmpty()) {
             model.setCurrent(list.get(0));
+            return true;
         } else {
             model.setCurrent(new Receta());
+            return false;
         }
     }
 
-    public void searchByRecetaId(String recetaId) {
-        java.util.List<Receta> list = new java.util.ArrayList<>();
-        Receta r = new Receta();
-        r.setId(recetaId);
+    public boolean searchByRecetaId(String recetaId) {
+        List<Receta> list = new java.util.ArrayList<>();
         try {
+            Receta r = new Receta();
+            r.setId(recetaId);
             Receta result = Service.instance().readReceta(r);
             if (result != null) {
                 list.add(result);
                 model.setCurrent(result);
-            } else {
-                model.setCurrent(new Receta());
             }
         } catch (Exception ex) {
-            model.setCurrent(new Receta());
         }
         model.setList(list);
+        return !list.isEmpty();
     }
 }

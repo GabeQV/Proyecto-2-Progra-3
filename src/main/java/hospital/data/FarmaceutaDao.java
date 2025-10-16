@@ -1,6 +1,7 @@
 package hospital.data;
 
 import hospital.logic.Farmaceuta;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,28 +16,51 @@ public class FarmaceutaDao {
     }
 
     public void create(Farmaceuta f) throws Exception{
-        String sql="insert into Farmaceuta (usuarios_idUsuario, usuarios_claveUsuario, usuarios_nombreUsuario)"+
-                "values(?,?,?)";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, f.getId());
-        stm.setString(2, f.getClave());
-        stm.setString(3, f.getNombre());
-        int count=db.executeUpdate(stm);
-        if (count==0){
-            throw new Exception("Farmaceuta ya existe");
+        Connection cnx = null;
+        try {
+            cnx = db.getConnection();
+            cnx.setAutoCommit(false);
+
+            String sqlUsuario="insert into usuarios (idUsuario, claveUsuario, nombreUsuario, tipoUsuario) values(?,?,?,?)";
+            PreparedStatement stmUsuario = cnx.prepareStatement(sqlUsuario);
+            stmUsuario.setString(1, f.getId());
+            stmUsuario.setString(2, f.getClave());
+            stmUsuario.setString(3, f.getNombre());
+            stmUsuario.setString(4, "FARMACEUTA");
+            int countUsuario = stmUsuario.executeUpdate();
+            if (countUsuario == 0) {
+                throw new Exception("Farmaceuta ya existe en usuarios");
+            }
+
+            String sqlFarmaceuta="insert into farmaceutas (usuarios_idUsuario) values(?)";
+            PreparedStatement stmFarmaceuta = cnx.prepareStatement(sqlFarmaceuta);
+            stmFarmaceuta.setString(1, f.getId());
+            int countFarmaceuta = stmFarmaceuta.executeUpdate();
+            if (countFarmaceuta == 0) {
+                throw new Exception("No se pudo crear el registro de farmaceuta");
+            }
+
+            cnx.commit();
+        } catch (SQLException ex) {
+            if (cnx != null) cnx.rollback();
+            throw new Exception("Error al crear farmaceuta: " + ex.getMessage());
+        } finally {
+            if (cnx != null) {
+                cnx.setAutoCommit(true);
+                cnx.close();
+            }
         }
     }
 
     public Farmaceuta read(String id) throws Exception{
-        String sql="select * from Farmaceuta f "+
-                "where f.usuarios_idUsuario=?";
+        String sql="select u.idUsuario, u.claveUsuario, u.nombreUsuario " +
+                "from usuarios u inner join farmaceutas f on u.idUsuario = f.usuarios_idUsuario "+
+                "where u.idUsuario=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, id);
         ResultSet rs =  db.executeQuery(stm);
-        Farmaceuta f;
         if (rs.next()) {
-            f = from(rs,"f");
-            return f;
+            return from(rs);
         }
         else{
             throw new Exception ("Farmaceuta no Existe");
@@ -44,23 +68,19 @@ public class FarmaceutaDao {
     }
 
     public void update(Farmaceuta f) throws Exception{
-        String sql="update farmaceuta set usuarios_claveUsuario=?,usuarios_nombreUsuario=?"+
-                "where usuarios_idUsuario=?";
+        String sql="update usuarios set claveUsuario=?, nombreUsuario=? where idUsuario=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, f.getClave());
         stm.setString(2, f.getNombre());
-        stm.setString(4, f.getId());
+        stm.setString(3, f.getId());
         int count=db.executeUpdate(stm);
-        if (count==0){
-            throw new Exception("Farmaceuta ya existe");
-        }
         if (count==0){
             throw new Exception("Farmaceuta no existe");
         }
     }
 
     public void delete(Farmaceuta f) throws Exception{
-        String sql="delete from Farmaceuta where usuarios_idUsuario=?";
+        String sql="delete from usuarios where idUsuario=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, f.getId());
         int count=db.executeUpdate(stm);
@@ -70,27 +90,27 @@ public class FarmaceutaDao {
     }
 
     public List<Farmaceuta> findByNombre(Farmaceuta filtro){
-        List<Farmaceuta> resultado = new ArrayList<Farmaceuta>();
+        List<Farmaceuta> resultado = new ArrayList<>();
         try {
-            String sql="select * from Farmaceuta f "+
-                    "where f.usuarios_nombreUsuario like ?";
+            String sql="select u.idUsuario, u.nombreUsuario, u.claveUsuario from usuarios u " +
+                    "inner join farmaceutas f on u.idUsuario = f.usuarios_idUsuario "+
+                    "where u.nombreUsuario like ?";
             PreparedStatement stm = db.prepareStatement(sql);
             stm.setString(1, "%"+filtro.getNombre()+"%");
             ResultSet rs =  db.executeQuery(stm);
-            Farmaceuta f;
             while (rs.next()) {
-                f = from(rs,"f");
-                resultado.add(f);
+                resultado.add(from(rs));
             }
         } catch (SQLException ex) {  }
         return resultado;
     }
 
-    private Farmaceuta from(ResultSet rs, String alias){
+    private Farmaceuta from(ResultSet rs){
         try {
             Farmaceuta f= new Farmaceuta();
-            f.setId(rs.getString(alias + ".usuarios_idUsuario"));
-            f.setNombre(rs.getString(alias + ".usuarios_nombreUsuario"));
+            f.setId(rs.getString("idUsuario"));
+            f.setNombre(rs.getString("nombreUsuario"));
+            f.setClave(rs.getString("claveUsuario"));
             return f;
         } catch (SQLException ex) {
             return null;

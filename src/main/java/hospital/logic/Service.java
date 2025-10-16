@@ -170,43 +170,44 @@ public class Service {
         // Admin local
         if ("ADM".equals(id) && "ADM".equals(clave)) return new Admin();
 
-        java.sql.Connection conn = null;
-        java.sql.PreparedStatement stmt = null;
-        java.sql.ResultSet rs = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         try {
             conn = Database.instance().getConnection();
 
-            String sql = "SELECT nombreUsuario FROM usuarios WHERE idUsuario = ? AND claveUsuario = ?";
+            String sql = "SELECT nombreUsuario, tipoUsuario FROM usuarios WHERE idUsuario = ? AND claveUsuario = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, id);
             stmt.setString(2, clave);
             rs = stmt.executeQuery();
+
             if (!rs.next()) {
                 throw new Exception("Usuario o clave incorrecta");
             }
+
             String nombre = rs.getString("nombreUsuario");
-            rs.close(); stmt.close();
+            String tipo = rs.getString("tipoUsuario");
 
-            sql = "SELECT especialidad FROM medicos WHERE usuarios_idUsuario = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, id);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                String esp = rs.getString("especialidad");
-                return new Medico(id, clave, nombre, esp != null ? esp : "");
-            }
-            rs.close(); stmt.close();
-
-            sql = "SELECT 1 FROM farmaceutas WHERE usuarios_idUsuario = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, id);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Farmaceuta(id, clave, nombre);
+            switch (tipo) {
+                case "MEDICO":
+                    rs.close(); stmt.close();
+                    sql = "SELECT especialidad FROM medicos WHERE usuarios_idUsuario = ?";
+                    stmt = conn.prepareStatement(sql);
+                    stmt.setString(1, id);
+                    rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        String esp = rs.getString("especialidad");
+                        return new Medico(id, clave, nombre, esp != null ? esp : "");
+                    }
+                    break;
+                case "FARMACEUTA":
+                    return new Farmaceuta(id, clave, nombre);
             }
 
-            throw new Exception("El usuario no tiene un rol asignado (médico o farmaceuta).");
+            throw new Exception("El usuario no tiene un rol asignado válido (medico o farmaceuta).");
+
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
             throw new Exception("Error de base de datos: " + e.getMessage());
@@ -216,6 +217,7 @@ public class Service {
             if (conn != null) try { conn.close(); } catch (java.sql.SQLException ignored) {}
         }
     }
+
     public void cambiarClave(String id, String claveActual, String nuevaClave, String nuevaClaveConfirm) throws Exception {
         if ("ADM".equals(id)) throw new Exception("No es posible cambiar la clave del administrador.");
 

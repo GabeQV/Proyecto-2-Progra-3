@@ -14,7 +14,7 @@ public class MedicamentosDao {
         db= Database.instance();
     }
     public void create(Medicamento e) throws Exception{
-        String sql="insert into Medicamento (idMedicamento, nombreMedicamento, presentacionMedicamento)"+
+        String sql="insert into Medicamentos (idMedicamento, nombreMedicamento, presentacionMedicamento)"+
                 "values(?,?,?)";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, e.getId());
@@ -27,7 +27,7 @@ public class MedicamentosDao {
     }
 
     public Medicamento read(String id) throws Exception{
-        String sql="select * from Medicamento m "+
+        String sql="select * from Medicamentos m "+
                 "where m.idMedicamento=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, id);
@@ -59,7 +59,7 @@ public class MedicamentosDao {
     }
 
     public void delete(Medicamento m) throws Exception{
-        String sql="delete from Medicamento where idMedicamento=?";
+        String sql="delete from Medicamentos where idMedicamento=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, m.getId());
         int count=db.executeUpdate(stm);
@@ -71,7 +71,7 @@ public class MedicamentosDao {
     public List<Medicamento> findByNombre(Medicamento filtro){
         List<Medicamento> resultado = new ArrayList<Medicamento>();
         try {
-            String sql="select * from Medicamento m "+
+            String sql="select * from Medicamentos m "+
                     "where m.nombreMedicamento like ?";
             PreparedStatement stm = db.prepareStatement(sql);
             stm.setString(1, "%"+filtro.getNombre()+"%");
@@ -90,6 +90,7 @@ public class MedicamentosDao {
             Medicamento p= new Medicamento();
             p.setId(rs.getString(alias + ".idMedicamento"));
             p.setNombre(rs.getString(alias + ".nombreMedicamento"));
+            p.setPresentacion(rs.getString(alias + ".presentacionMedicamento"));
             return p;
         } catch (SQLException ex) {
             return null;

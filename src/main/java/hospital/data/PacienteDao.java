@@ -15,7 +15,7 @@ public class PacienteDao {
     public PacienteDao(){db= Database.instance();}
 
     public void create(Paciente p) throws Exception{
-        String sql="insert into Paciente (idPaciente, nombrePaciente, fechaNacimiento, telefono)"+
+        String sql="insert into Pacientes (idPaciente, nombrePaciente, fechaNacimiento, telefono)"+
                 "values(?,?,?,?)";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, p.getId());
@@ -29,7 +29,7 @@ public class PacienteDao {
     }
 
     public Paciente read(String id) throws Exception{
-        String sql="select * from Paciente p "+
+        String sql="select * from Pacientes p "+
                 "where p.idPaciente=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, id);
@@ -62,7 +62,7 @@ public class PacienteDao {
     }
 
     public void delete(Paciente o) throws Exception{
-        String sql="delete from Paciente where idPaciente=?";
+        String sql="delete from Pacientes where idPaciente=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, o.getId());
         int count=db.executeUpdate(stm);
@@ -74,7 +74,7 @@ public class PacienteDao {
     public List<Paciente> findByNombre(Paciente filtro){
         List<Paciente> resultado = new ArrayList<Paciente>();
         try {
-            String sql="select * from Paciente p "+
+            String sql="select * from Pacientes p "+
                     "where p.nombrePaciente like ?";
             PreparedStatement stm = db.prepareStatement(sql);
             stm.setString(1, "%"+filtro.getNombre()+"%");
@@ -93,6 +93,11 @@ public class PacienteDao {
             Paciente p= new Paciente();
             p.setId(rs.getString(alias + ".idPaciente"));
             p.setNombre(rs.getString(alias + ".nombrePaciente"));
+            Date fechaNacimiento = rs.getDate(alias + ".fechaNacimiento");
+            if (fechaNacimiento != null) {
+                p.setFechaNacimiento(fechaNacimiento.toLocalDate());
+            }
+            p.setTelefono(rs.getString(alias + ".telefono"));
             return p;
         } catch (SQLException ex) {
             return null;

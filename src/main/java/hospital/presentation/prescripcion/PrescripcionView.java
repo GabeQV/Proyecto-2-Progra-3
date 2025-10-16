@@ -3,6 +3,7 @@ package hospital.presentation.prescripcion;
 import com.github.lgooddatepicker.components.DatePicker;
 import hospital.Main;
 import hospital.logic.Receta;
+import hospital.logic.Sesion;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -91,6 +92,8 @@ public class PrescripcionView implements PropertyChangeListener {
                     LocalDate fecha = FechaDeRetiro.getDate();
                     n.setFecha(fecha);
                     n.setEstado("Confeccionado");
+                    n.setUsuario(Sesion.instance().getUsuarioActual());
+
                     try {
                         controller.guardarRecetaActual(n);
                         JOptionPane.showMessageDialog(PrescripcionPanel, "REGISTRO APLICADO", "", JOptionPane.INFORMATION_MESSAGE);

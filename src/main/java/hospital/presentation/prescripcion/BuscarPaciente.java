@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collections;
+import java.util.List;
 
 public class BuscarPaciente extends JDialog implements PropertyChangeListener {
     private JPanel contentPane;
@@ -64,6 +66,41 @@ public class BuscarPaciente extends JDialog implements PropertyChangeListener {
                 }
             }
         });
+
+        textField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                buscarPacientes();
+            }
+        });
+        comboBox1.addActionListener(e -> buscarPacientes());
+    }
+
+    private void buscarPacientes() {
+        String criterio = textField1.getText();
+        String tipoBusqueda = (String) comboBox1.getSelectedItem();
+        List<Paciente> result;
+
+        if (criterio.isEmpty()) {
+            result = Service.instance().findAllPacientes();
+        } else {
+            Paciente filtro = new Paciente();
+            if ("Nombre".equals(tipoBusqueda)) {
+                filtro.setNombre(criterio);
+                result = Service.instance().findAllPacientes().stream()
+                        .filter(p -> p.getNombre().toLowerCase().contains(criterio.toLowerCase()))
+                        .toList();
+            } else { // "Codigo"
+                try {
+                    filtro.setId(criterio);
+                    result = Collections.singletonList(Service.instance().readPaciente(filtro));
+                } catch (Exception e) {
+                    result = Collections.emptyList();
+                }
+            }
+        }
+        int[] cols = {TableModel.ID, TableModel.NOMBRE, TableModel.FECHA_NACIMIENTO, TableModel.TELEFONO};
+        pacientesTable.setModel(new TableModel(cols, result));
     }
 
     private void onOK() {

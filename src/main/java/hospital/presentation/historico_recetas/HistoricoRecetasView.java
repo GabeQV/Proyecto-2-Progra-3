@@ -37,30 +37,23 @@ public class HistoricoRecetasView implements PropertyChangeListener {
             String pacienteId = idPacienteTextField.getText();
             if (pacienteId == null || pacienteId.isEmpty()) {
                 JOptionPane.showMessageDialog(historicoRecetasPanel, "Ingrese ID de paciente para buscar", "Información", JOptionPane.INFORMATION_MESSAGE);
-                nombrePacienteLabel.setText("PACIENTE");
                 return;
             }
-            controller.searchByPacienteId(pacienteId);
-            if (!model.getList().isEmpty() && model.getList().get(0).getPaciente() != null) {
-                nombrePacienteLabel.setText(model.getList().get(0).getPaciente().getNombre());
-            } else {
-                nombrePacienteLabel.setText("PACIENTE");
-                JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontraron recetas para ese ID", "Información", JOptionPane.INFORMATION_MESSAGE);
+            boolean encontrado = controller.searchByPacienteId(pacienteId);
+            if (!encontrado) {
+                JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontraron recetas para ese paciente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
         buscarIdRecetaButton.addActionListener(e -> {
             String recetaId = idRecetaTextField.getText();
             if (recetaId == null || recetaId.isEmpty()) {
-                nombrePacienteLabel.setText("PACIENTE");
+                controller.clear();
                 return;
             }
-            controller.searchByRecetaId(recetaId);
-            if (!model.getList().isEmpty() && model.getList().get(0).getPaciente() != null) {
-                nombrePacienteLabel.setText(model.getList().get(0).getPaciente().getNombre());
-            } else {
-                nombrePacienteLabel.setText("PACIENTE");
-                JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontró receta con ese ID", "Información", JOptionPane.INFORMATION_MESSAGE);
+            boolean encontrado = controller.searchByRecetaId(recetaId);
+            if (!encontrado) {
+                JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontró una receta con ese ID", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -95,8 +88,12 @@ public class HistoricoRecetasView implements PropertyChangeListener {
                         TableModel.ESTADO
                 };
                 recetasTable.setModel(new TableModel(cols, model.getList()));
-                if (!model.getList().isEmpty() && model.getList().get(0).getPaciente() != null) {
-                    nombrePacienteLabel.setText(model.getList().get(0).getPaciente().getNombre());
+
+                if (!model.getList().isEmpty()) {
+                    Receta primeraReceta = model.getList().get(0);
+                    if (primeraReceta != null && primeraReceta.getPaciente() != null) {
+                        nombrePacienteLabel.setText(primeraReceta.getPaciente().getNombre());
+                    }
                 } else {
                     nombrePacienteLabel.setText("PACIENTE");
                 }
@@ -105,9 +102,8 @@ public class HistoricoRecetasView implements PropertyChangeListener {
                 Receta r = model.getCurrent();
                 if (r != null && r.getPaciente() != null) {
                     nombrePacienteLabel.setText(r.getPaciente().getNombre());
-                } else {
-                    nombrePacienteLabel.setText("PACIENTE");
                 }
+
                 break;
         }
         historicoRecetasPanel.revalidate();
