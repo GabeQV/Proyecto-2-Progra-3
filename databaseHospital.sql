@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`recetas` (
     `fecha` DATE NULL,
     `medicamentos_idMedicamento` VARCHAR(45) NOT NULL,
     `pacientes_idPaciente` VARCHAR(45) NOT NULL,
-    `usuarios_idusuarios` VARCHAR(45) NOT NULL,
+    `usuarios_idusuarios` VARCHAR(45) NULL,
     PRIMARY KEY (`idRecetas`),
     INDEX `fk_recetas_medicamentos1_idx` (`medicamentos_idMedicamento` ASC) VISIBLE,
     INDEX `fk_recetas_pacientes1_idx` (`pacientes_idPaciente` ASC) VISIBLE,
@@ -103,13 +103,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`recetas` (
     CONSTRAINT `fk_recetas_pacientes1`
         FOREIGN KEY (`pacientes_idPaciente`)
             REFERENCES `mydb`.`pacientes` (`idPaciente`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION,
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
     CONSTRAINT `fk_recetas_usuarios1`
         FOREIGN KEY (`usuarios_idusuarios`)
             REFERENCES `mydb`.`usuarios` (`idUsuario`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION)
+            ON DELETE SET NULL
+            ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
