@@ -91,7 +91,7 @@ public class AgregarMedicamento extends JDialog implements PropertyChangeListene
         } else {
             if ("Nombre".equals(tipoBusqueda)) {
                 result = Service.instance().findMedicamentosByNombre(criterio);
-            } else { // "Codigo"
+            } else {
                 result = Service.instance().findMedicamentosByCodigo(criterio);
             }
         }
