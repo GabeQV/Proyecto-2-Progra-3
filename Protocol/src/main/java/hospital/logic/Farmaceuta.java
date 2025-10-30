@@ -1,11 +1,8 @@
 package hospital.logic;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
-
-public class Farmaceuta extends Usuario {
+public class Farmaceuta extends Usuario implements Serializable {
 
     public Farmaceuta() {super();}
     public Farmaceuta(String id, String clave, String nombre) {

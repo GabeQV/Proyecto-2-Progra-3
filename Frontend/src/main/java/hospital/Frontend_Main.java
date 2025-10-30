@@ -10,9 +10,9 @@ public class Frontend_Main {
 
     public static void main(String[] args) {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ex) {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         }
+        catch (Exception ex) {};
 
         Service.instance();
 

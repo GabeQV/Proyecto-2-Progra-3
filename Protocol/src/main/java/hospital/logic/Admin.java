@@ -1,6 +1,8 @@
 package hospital.logic;
 
-public class Admin extends Usuario{
+import java.io.Serializable;
+
+public class Admin extends Usuario implements Serializable {
     public Admin(){
         super("ADM","ADM","Administrador");
     }

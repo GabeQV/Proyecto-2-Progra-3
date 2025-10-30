@@ -1,15 +1,10 @@
 package hospital.logic;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlID;
-import jakarta.xml.bind.annotation.XmlSeeAlso;
+import java.io.Serializable;
+import java.util.Objects;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({Medico.class, Farmaceuta.class})
-public abstract class Usuario {
+public abstract class Usuario implements Serializable {
 
-    @XmlID
     protected String id;
     protected String clave;
     protected String nombre;
@@ -44,6 +39,19 @@ public abstract class Usuario {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public abstract String getTipo();

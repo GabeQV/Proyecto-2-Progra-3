@@ -1,13 +1,13 @@
 package hospital.logic;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
-
-public class Paciente{
+public class Paciente implements Serializable {
 
     protected String id;
     protected String nombre;
-
     protected LocalDate fechaNacimiento;
     private String telefono;
 
@@ -45,5 +45,16 @@ public class Paciente{
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paciente paciente = (Paciente) o;
+        return Objects.equals(id, paciente.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

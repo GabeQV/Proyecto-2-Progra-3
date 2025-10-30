@@ -1,23 +1,18 @@
 package hospital.logic;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
-public class Receta {
+public class Receta implements Serializable {
 
     private String id;
-
     private String indicaciones;
-
     private String cantidad;
-
     private String duracion;
-
     private String estado;
-
     private Usuario usuario;
-
     private Paciente paciente;
-
     private Medicamento medicamento;
     LocalDate fecha;
 
@@ -89,4 +84,16 @@ public class Receta {
     public LocalDate getFecha() { return fecha; }
     public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Receta receta = (Receta) o;
+        return Objects.equals(id, receta.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
