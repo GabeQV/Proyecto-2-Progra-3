@@ -22,9 +22,9 @@ public class Protocol {
     // Pacientes
     public static final int PACIENTE_CREATE = 301;
     public static final int PACIENTE_READ = 302;
-    public static final int PACIENTE_UPDATE = 302;
-    public static final int PACIENTE_DELETE = 302;
-    public static final int PACIENTE_FIND_ALL = 302;
+    public static final int PACIENTE_UPDATE = 303;
+    public static final int PACIENTE_DELETE = 304;
+    public static final int PACIENTE_FIND_ALL = 305;
 
     // Medicamentos
     public static final int MEDICAMENTO_CREATE = 401;
