@@ -68,25 +68,25 @@ public class Sesion implements ThreadListener {
         //MVC de Medicos
         hospital.presentation.medicos.MedicosView medicosView = new hospital.presentation.medicos.MedicosView();
         hospital.presentation.medicos.Model medicosModel = new hospital.presentation.medicos.Model();
-        hospital.presentation.medicos.Controller medicosController = new hospital.presentation.medicos.Controller(medicosView, medicosModel);
+        this.medicosController = new hospital.presentation.medicos.Controller(medicosView, medicosModel);
         tabbedPane.addTab("Medicos", medicosView.getMedicosPanel());
 
         //MVC de Farmaceutas
         hospital.presentation.farmaceutas.FarmaceutasView farmaceutasView = new hospital.presentation.farmaceutas.FarmaceutasView();
         hospital.presentation.farmaceutas.Model farmaceutasModel = new hospital.presentation.farmaceutas.Model();
-        hospital.presentation.farmaceutas.Controller farmaceutasController = new hospital.presentation.farmaceutas.Controller(farmaceutasView, farmaceutasModel);
+        this.farmaceutasController = new hospital.presentation.farmaceutas.Controller(farmaceutasView, farmaceutasModel);
         tabbedPane.addTab("Farmaceutas", farmaceutasView.getFarmaceutasPanel());
 
         //MVC de Pacientes
         hospital.presentation.pacientes.PacientesView pacientesView = new hospital.presentation.pacientes.PacientesView();
         hospital.presentation.pacientes.Model pacientesModel = new hospital.presentation.pacientes.Model();
-        hospital.presentation.pacientes.Controller pacientesController = new hospital.presentation.pacientes.Controller(pacientesView, pacientesModel);
+        this.pacientesController = new hospital.presentation.pacientes.Controller(pacientesView, pacientesModel);
         tabbedPane.addTab("Pacientes", pacientesView.getPacientesPanel());
 
         //MVC de catalogo
         hospital.presentation.catalogo.CatologoView catologoView = new hospital.presentation.catalogo.CatologoView();
         hospital.presentation.catalogo.Model catologoModel = new hospital.presentation.catalogo.Model();
-        hospital.presentation.catalogo.Controller catalogoController = new hospital.presentation.catalogo.Controller(catologoView, catologoModel);
+        this.catalogoController = new hospital.presentation.catalogo.Controller(catologoView, catologoModel);
         tabbedPane.addTab("Medicamentos", catologoView.getCatalogoPanel());
 
         //MVC de dashboard
@@ -101,7 +101,7 @@ public class Sesion implements ThreadListener {
         //MVC de historico
         hospital.presentation.historico_recetas.HistoricoRecetasView historicoRecetasView = new hospital.presentation.historico_recetas.HistoricoRecetasView();
         hospital.presentation.historico_recetas.Model historicoRecetaModel = new hospital.presentation.historico_recetas.Model();
-        hospital.presentation.historico_recetas.Controller historicoRecetasController = new hospital.presentation.historico_recetas.Controller(historicoRecetasView, historicoRecetaModel);
+        this.historicoController = new hospital.presentation.historico_recetas.Controller(historicoRecetasView, historicoRecetaModel);
         tabbedPane.addTab("Historico", historicoRecetasView.getHitoricoRecetasPanel());
 
     }
@@ -132,7 +132,7 @@ public class Sesion implements ThreadListener {
         //MVC de despacho
         DespachoView despachoView = new DespachoView();
         hospital.presentation.despacho.Model despachoModel = new hospital.presentation.despacho.Model();
-        hospital.presentation.despacho.Controller controller = new hospital.presentation.despacho.Controller(despachoView, despachoModel);
+        this.despachoController = new hospital.presentation.despacho.Controller(despachoView, despachoModel);
         tabbedPane.addTab("Despacho", despachoView.getDespachoView());
 
         //MVC de dashboard
@@ -187,4 +187,3 @@ public class Sesion implements ThreadListener {
         this.usuarioActual = null;
     }
 }
-

@@ -73,7 +73,7 @@ public class Server {
     }
     public void deliver_message(Worker from, String message){
         for(Worker w:workers){
-            if (w!=from) w.deliver_message(message);
+            w.deliver_message(message);
         }
     }
 

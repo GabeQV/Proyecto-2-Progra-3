@@ -256,7 +256,7 @@ public class Worker {
                         }
                         break;
 
-                        //------------ PACIENTES ------------
+                    //------------ PACIENTES ------------
                     case Protocol.PACIENTE_READ:
                         try {
                             Paciente e = service.readPaciente((Paciente) is.readObject());
@@ -307,7 +307,7 @@ public class Worker {
                         }
                         break;
 
-                        //------------ FARMACEUTAS ------------
+                    //------------ FARMACEUTAS ------------
                     case Protocol.FARMACEUTA_READ:
                         try {
                             Farmaceuta e = service.readFarmaceuta((Farmaceuta) is.readObject());

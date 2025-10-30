@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="56592d18-d783-4df6-9dd0-3a05744a0546" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Farmaceuta.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Farmaceuta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medicamento.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medicamento.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medico.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medico.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Paciente.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Paciente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Receta.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Receta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Sesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Sesion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +42,7 @@
   "keyToString": {
     "Application.Backend.executor": "Run",
     "Application.Frontend1.executor": "Run",
+    "Application.Frontend2.executor": "Run",
     "Maven.Backend [clean].executor": "Run",
     "Maven.Backend [install].executor": "Run",
     "Maven.Frontend [clean].executor": "Run",
@@ -111,7 +107,7 @@
       <option name="presentableId" value="Default" />
       <updated>1761797971407</updated>
       <workItem from="1761797972573" duration="88000" />
-      <workItem from="1761798074000" duration="1869000" />
+      <workItem from="1761798074000" duration="2698000" />
     </task>
     <servers />
   </component>
