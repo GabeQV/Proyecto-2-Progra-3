@@ -1,6 +1,7 @@
 package hospital.presentation.prescripcion;
 
 import hospital.logic.Paciente;
+import hospital.logic.Service;
 import hospital.presentation.pacientes.TableModel;
 
 import javax.swing.*;

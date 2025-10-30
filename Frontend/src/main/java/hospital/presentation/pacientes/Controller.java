@@ -1,6 +1,7 @@
 package hospital.presentation.pacientes;
 
 import hospital.logic.Paciente;
+import hospital.logic.Service;
 
 public class Controller {
     PacientesView view;

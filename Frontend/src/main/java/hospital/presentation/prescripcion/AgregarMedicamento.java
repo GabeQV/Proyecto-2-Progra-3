@@ -1,6 +1,7 @@
 package hospital.presentation.prescripcion;
 
 import hospital.logic.Medicamento;
+import hospital.logic.Service;
 
 import javax.swing.*;
 import java.awt.event.*;

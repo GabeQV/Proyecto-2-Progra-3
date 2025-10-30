@@ -1,6 +1,7 @@
 package hospital.presentation.dashboard;
 
 import hospital.logic.Receta;
+import hospital.logic.Service;
 
 import java.time.LocalDate;
 import java.util.Collections;

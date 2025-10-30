@@ -1,6 +1,7 @@
 package hospital.presentation.catalogo;
 
 import hospital.logic.Medicamento;
+import hospital.logic.Service;
 
 import java.util.List;
 

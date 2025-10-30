@@ -1,6 +1,7 @@
 package hospital.presentation.farmaceutas;
 
 import hospital.logic.Farmaceuta;
+import hospital.logic.Service;
 
 public class Controller {
     FarmaceutasView view;

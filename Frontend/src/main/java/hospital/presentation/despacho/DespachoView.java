@@ -1,6 +1,8 @@
 package hospital.presentation.despacho;
 
+import hospital.logic.Paciente;
 import hospital.logic.Receta;
+import hospital.logic.Service;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -15,7 +17,7 @@ public class DespachoView implements PropertyChangeListener {
     private JButton procesarButton;
     private JButton listoButton;
     private JButton entregarButton;
-    private JButton button4; // volver
+    private JButton button4;
     private JButton buscarButton;
     private JPanel despachoView;
     private JLabel nombrePacienteLabel;
@@ -29,15 +31,24 @@ public class DespachoView implements PropertyChangeListener {
             String pacienteId = idField.getText();
             if (pacienteId == null || pacienteId.isEmpty()) {
                 JOptionPane.showMessageDialog(despachoView, "Ingrese ID de paciente para buscar", "Información", JOptionPane.INFORMATION_MESSAGE);
-                nombrePacienteLabel.setText("PACIENTE");
                 return;
             }
-            controller.searchByPacienteId(pacienteId);
-            if (!model.getList().isEmpty() && model.getList().get(0).getPaciente() != null) {
-                nombrePacienteLabel.setText(model.getList().get(0).getPaciente().getNombre());
-            } else {
+
+            try {
+                Paciente p = new Paciente();
+                p.setId(pacienteId);
+                Paciente pacienteEncontrado = Service.instance().readPaciente(p);
+                nombrePacienteLabel.setText(pacienteEncontrado.getNombre());
+
+                controller.searchByPacienteId(pacienteId);
+
+                if (model.getList().isEmpty()) {
+                    JOptionPane.showMessageDialog(despachoView, "El paciente no tiene recetas pendientes", "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } catch (Exception ex) {
                 nombrePacienteLabel.setText("PACIENTE");
-                JOptionPane.showMessageDialog(despachoView, "No se encontraron recetas para ese ID", "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(despachoView, "Error: " + ex.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -45,32 +56,32 @@ public class DespachoView implements PropertyChangeListener {
             try {
                 controller.procesar();
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(despachoView, "Error al procesar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-            updateButtons(model.getCurrent(), model.getList());
         });
 
         listoButton.addActionListener(e -> {
             try {
                 controller.listo();
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(despachoView, "Error al marcar como lista: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-            updateButtons(model.getCurrent(), model.getList());
         });
 
         entregarButton.addActionListener(e -> {
             try {
                 controller.entregar();
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(despachoView, "Error al entregar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-            updateButtons(model.getCurrent(), model.getList());
         });
 
         button4.addActionListener(e -> {
             try {
                 controller.revertir();
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(despachoView, "Error al revertir estado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-            updateButtons(model.getCurrent(), model.getList());
         });
 
         recetasTable.addMouseListener(new MouseAdapter() {
@@ -80,12 +91,6 @@ public class DespachoView implements PropertyChangeListener {
                     int row = recetasTable.getSelectedRow();
                     Receta seleccionado = ((TableModel) recetasTable.getModel()).getRowAt(row);
                     controller.model.setCurrent(seleccionado);
-
-                    if (seleccionado != null && seleccionado.getPaciente() != null) {
-                        nombrePacienteLabel.setText(seleccionado.getPaciente().getNombre());
-                    } else {
-                        nombrePacienteLabel.setText("PACIENTE");
-                    }
                 }
             }
         });
@@ -119,21 +124,15 @@ public class DespachoView implements PropertyChangeListener {
                 recetasTable.setModel(new TableModel(cols, model.getList()));
                 break;
             case Model.CURRENT:
-                Receta r = model.getCurrent();
-                if (r != null) {
-                    idField.setText(r.getPaciente() != null ? r.getPaciente().getId() : "");
-                } else {
-                    idField.setText("");
-                }
-                updateButtons(model.getCurrent(), model.getList());
+                updateButtons(model.getCurrent());
                 break;
         }
         despachoView.revalidate();
     }
 
-    private void updateButtons(Receta current, List<Receta> list) {
+    private void updateButtons(Receta current) {
         String estado = current != null ? current.getEstado() : null;
-        if (estado == null || estado.isEmpty()) {
+        if (estado == null || estado.isEmpty() || model.getList().isEmpty()) {
             procesarButton.setEnabled(false);
             listoButton.setEnabled(false);
             entregarButton.setEnabled(false);

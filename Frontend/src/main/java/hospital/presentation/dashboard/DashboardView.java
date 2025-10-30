@@ -3,6 +3,7 @@ package hospital.presentation.dashboard;
 import com.github.lgooddatepicker.components.DatePicker;
 import hospital.logic.Medicamento;
 import hospital.logic.Receta;
+import hospital.logic.Service;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,12 +13,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DashboardView extends JPanel implements PropertyChangeListener  {
 
     private JPanel DashboardPanel;
-    private JComboBox medicamentosComboBox;
+    private JComboBox<String> medicamentosComboBox;
     private JButton filtrarButton1;
     private JButton addButton;
     private JTable medicamentosTable;
@@ -45,40 +47,35 @@ public class DashboardView extends JPanel implements PropertyChangeListener  {
 
         pieChartPanel.setLayout(new BorderLayout());
         pieChartPanel.add(pieChart, BorderLayout.CENTER);
-        List<Medicamento> medicamentos = Service.instance().findAllMedicamentos();
-        String[] medicamentosStr = new String[medicamentos.size()];
-        int i = 0;
-        while (i < medicamentos.size()) {
-            medicamentosStr[i] = medicamentos.get(i).getNombre();
-            i+=1;
+
+        try {
+            List<Medicamento> medicamentos = Service.instance().findAllMedicamentos();
+            String[] medicamentosStr = new String[medicamentos.size()];
+            for (int i = 0; i < medicamentos.size(); i++) {
+                medicamentosStr[i] = medicamentos.get(i).getNombre();
+            }
+            medicamentosComboBox.setModel(new DefaultComboBoxModel<>(medicamentosStr));
+        } catch (Exception e) {
+            System.err.println("Error al cargar medicamentos para el dashboard: " + e.getMessage());
+            medicamentosComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Error al cargar"}));
         }
-        medicamentosComboBox.setModel(new DefaultComboBoxModel(medicamentosStr));
 
-        // Listener para botón ADD
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String seleccionado = (String) medicamentosComboBox.getSelectedItem();
-                if (seleccionado != null && !medicamentosSeleccionados.contains(seleccionado)) {
-                    medicamentosSeleccionados.add(seleccionado);
-                }
-                actualizarVista();
+
+        addButton.addActionListener(e -> {
+            String seleccionado = (String) medicamentosComboBox.getSelectedItem();
+            if (seleccionado != null && !medicamentosSeleccionados.contains(seleccionado)) {
+                medicamentosSeleccionados.add(seleccionado);
             }
+            actualizarVista();
         });
 
-        filtrarButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                actualizarVista();
-            }
-        });
+        filtrarButton1.addActionListener(e -> actualizarVista());
     }
 
     private void actualizarVista() {
         LocalDate desde = desdeDatePicker.getDate();
         LocalDate hasta = hastaDatePicker.getDate();
-        List<Receta> filtradas = controller.findRecetasMultiple(desde, hasta, medicamentosSeleccionados);
-        model.setList(filtradas);
+        controller.findRecetasMultiple(desde, hasta, medicamentosSeleccionados);
     }
 
     @Override
@@ -91,7 +88,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener  {
                 pieChart.setData(model.getList());
                 break;
             case Model.CURRENT:
-
                 break;
         }
     }

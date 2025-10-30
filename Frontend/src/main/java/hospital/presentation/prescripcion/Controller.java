@@ -2,6 +2,7 @@ package hospital.presentation.prescripcion;
 
 import hospital.logic.Paciente;
 import hospital.logic.Receta;
+import hospital.logic.Service;
 import hospital.logic.Sesion;
 
 public class Controller {

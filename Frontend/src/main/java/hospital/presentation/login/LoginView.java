@@ -1,5 +1,6 @@
 package hospital.presentation.login;
 
+import hospital.logic.Service;
 import hospital.logic.Sesion;
 import hospital.logic.Usuario;
 import hospital.presentation.login.cambio_clave.CambioClaveView;

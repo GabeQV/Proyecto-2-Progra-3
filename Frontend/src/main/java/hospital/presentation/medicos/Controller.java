@@ -1,5 +1,6 @@
 package hospital.presentation.medicos;
 import hospital.logic.Medico;
+import hospital.logic.Service;
 
 public class Controller {
     MedicosView view;

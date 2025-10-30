@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Coordenadas Maven del proyecto Backend -->
     <groupId>hospital</groupId>
     <artifactId>Backend</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -21,7 +20,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.21</version>
         </dependency>
-        <!-- Dependencia al proyecto Protocol -->
         <dependency>
             <groupId>hospital</groupId>
             <artifactId>Protocol</artifactId>

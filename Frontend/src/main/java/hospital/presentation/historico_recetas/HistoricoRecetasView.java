@@ -1,7 +1,6 @@
 package hospital.presentation.historico_recetas;
 
 import hospital.logic.Receta;
-
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -39,21 +38,34 @@ public class HistoricoRecetasView implements PropertyChangeListener {
                 JOptionPane.showMessageDialog(historicoRecetasPanel, "Ingrese ID de paciente para buscar", "Información", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            boolean encontrado = controller.searchByPacienteId(pacienteId);
-            if (!encontrado) {
-                JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontraron recetas para ese paciente", "Información", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                boolean encontrado = controller.searchByPacienteId(pacienteId);
+                if (!encontrado) {
+                    JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontraron recetas para ese paciente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(historicoRecetasPanel, "Error al buscar paciente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         buscarIdRecetaButton.addActionListener(e -> {
             String recetaId = idRecetaTextField.getText();
             if (recetaId == null || recetaId.isEmpty()) {
-                controller.clear();
+                try {
+                    controller.clear();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(historicoRecetasPanel, "Error al limpiar la búsqueda: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 return;
             }
-            boolean encontrado = controller.searchByRecetaId(recetaId);
-            if (!encontrado) {
-                JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontró una receta con ese ID", "Información", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                boolean encontrado = controller.searchByRecetaId(recetaId);
+                if (!encontrado) {
+                    JOptionPane.showMessageDialog(historicoRecetasPanel, "No se encontró una receta con ese ID", "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(historicoRecetasPanel, "Error al buscar receta: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -103,7 +115,6 @@ public class HistoricoRecetasView implements PropertyChangeListener {
                 if (r != null && r.getPaciente() != null) {
                     nombrePacienteLabel.setText(r.getPaciente().getNombre());
                 }
-
                 break;
         }
         historicoRecetasPanel.revalidate();

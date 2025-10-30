@@ -1,6 +1,7 @@
 package hospital.presentation.historico_recetas;
 
 import hospital.logic.Receta;
+import hospital.logic.Service;
 
 import java.util.List;
 

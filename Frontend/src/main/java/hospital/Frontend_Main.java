@@ -1,5 +1,6 @@
 package hospital;
 
+import hospital.logic.Service;
 import hospital.presentation.login.LoginView;
 import javax.swing.*;
 import java.awt.Color;

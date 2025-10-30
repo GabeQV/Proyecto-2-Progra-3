@@ -1,5 +1,7 @@
 package hospital.presentation.login.cambio_clave;
 
+import hospital.logic.Service;
+
 public class Controller {
     private CambioClaveView view;
 

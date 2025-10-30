@@ -1,5 +1,7 @@
 package hospital.presentation.login.cambio_clave;
 
+import hospital.logic.Service;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
