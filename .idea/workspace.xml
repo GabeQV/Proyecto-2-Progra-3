@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c68b5e57-6488-4d4c-ad59-4aa1fa33b33c" name="Changes" comment="No se">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Protocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Protocol.java" afterDir="false" />
-    </list>
+    <list default="true" id="190002d2-5dbf-47a5-b33e-4d96a9ca67c5" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,38 +16,51 @@
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;NashiAU&quot;
+    &quot;assignee&quot;: &quot;GabeQV&quot;
   }
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/GabeQV/Proyecto-2-Progra-3&quot;,
-    &quot;accountId&quot;: &quot;f075c818-68ae-46c4-bedb-4a2f1f1d177d&quot;
+    &quot;url&quot;: &quot;https://github.com/GabeQV/Proyecto-2-Progra-3.git&quot;,
+    &quot;accountId&quot;: &quot;0bbc1bbd-0faf-4967-91e6-76f898cc281f&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
+  &quot;associatedIndex&quot;: 1
 }</component>
-  <component name="ProjectId" id="33zZK7OZRxrCc8NDFHNiw6SyfMe" />
+  <component name="ProjectId" id="34l7YgvvZjrFoIUn7tC571KhWcl" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev-Gabe&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gabeq/OneDrive/Documents/Codes/Proyecto-2-Progra-3/Proyecto-2-Progra-3/Backend/src/main/java/hospital/logic&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/gabeq/OneDrive/Documents/Codes/Proyecto-2-Progra-3/Proyecto-2-Progra-3/Protocol/src/main/java/org/example/Main.java&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Backend\src\main\java\hospital\logic" />
+      <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Frontend\src\main\java\hospital\presentation" />
+      <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Protocol\src\main\java\hospital\logic" />
+      <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Backend\src\main\java\Hospital\data" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Protocol\src\main\java\Hospital" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -66,43 +75,10 @@
       <created>1760321793767</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1760321793767</updated>
-      <workItem from="1760321795065" duration="4408000" />
-      <workItem from="1760329043697" duration="36000" />
-      <workItem from="1761779611971" duration="1658000" />
-      <workItem from="1761782603675" duration="2657000" />
-    </task>
-    <task id="LOCAL-00001" summary="RecetasDao hecho (?) hay que probar">
-      <option name="closed" value="true" />
-      <created>1760327432559</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1760327432559</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Logica del login cambiada DA ERROR EN EL CAMBIARE CLAVE hay que probarlo igual">
-      <option name="closed" value="true" />
-      <created>1760328856297</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1760328856297</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Logica del login cambiada DA ERROR EN EL CAMBIAR CLAVE hay que probarlo igual">
-      <option name="closed" value="true" />
-      <created>1760328880459</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1760328880459</updated>
-    </task>
-    <task id="LOCAL-00004" summary="No se">
-      <option name="closed" value="true" />
-      <created>1760329070174</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1760329070174</updated>
+      <updated>1761776353870</updated>
+      <workItem from="1761776354958" duration="2159000" />
+      <workItem from="1761781439692" duration="3894000" />
+      <workItem from="1761785541319" duration="2000" />
     </task>
     <option name="localTasksCounter" value="5" />
     <servers />
@@ -110,11 +86,15 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="RecetasDao hecho (?) hay que probar" />
-    <MESSAGE value="Logica del login cambiada DA ERROR EN EL CAMBIARE CLAVE hay que probarlo igual" />
-    <MESSAGE value="Logica del login cambiada DA ERROR EN EL CAMBIAR CLAVE hay que probarlo igual" />
-    <MESSAGE value="No se" />
-    <option name="LAST_COMMIT_MESSAGE" value="No se" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Protocol/src/main/java/hospital/Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
