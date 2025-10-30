@@ -5,103 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="190002d2-5dbf-47a5-b33e-4d96a9ca67c5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Service.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/ThreadListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Protocol/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Protocol.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/databaseHospital.sql" beforeDir="false" afterPath="$PROJECT_DIR$/databaseHospital.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/Data.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/FarmaceutaDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/FarmaceutaDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/LocalDateAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/MedicamentosDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/MedicamentosDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/MedicoDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/MedicoDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/PacienteDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/PacienteDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/RecetasDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/RecetasDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/data/XmlPersister.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Farmaceuta.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Farmaceuta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Medicamento.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medicamento.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Medico.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medico.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Paciente.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Paciente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Receta.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Receta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Sesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Sesion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/logic/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Usuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/abstracts/AbstractModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/abstracts/AbstractModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/abstracts/AbstractTableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/abstracts/AbstractTableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/catalogo/CatologoView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/CatologoView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/catalogo/CatologoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/CatologoView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/catalogo/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/catalogo/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/catalogo/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/DashboardView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/LineChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/LineChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/PieChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/PieChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/dashboard/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/despacho/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/despacho/DespachoView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/DespachoView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/despacho/DespachoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/DespachoView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/despacho/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/despacho/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/farmaceutas/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/farmaceutas/FarmaceutasView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/FarmaceutasView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/farmaceutas/FarmaceutasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/FarmaceutasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/farmaceutas/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/farmaceutas/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/historico_recetas/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/historico_recetas/HistoricoRecetasView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/HistoricoRecetasView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/historico_recetas/HistoricoRecetasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/HistoricoRecetasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/historico_recetas/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/historico_recetas/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/LoginView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/LoginView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/LoginView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/cambio_clave/CambioClaveView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/CambioClaveView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/cambio_clave/CambioClaveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/CambioClaveView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/login/cambio_clave/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/medicos/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/medicos/MedicosView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/MedicosView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/medicos/MedicosView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/MedicosView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/medicos/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/medicos/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/pacientes/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/pacientes/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/pacientes/PacientesView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/PacientesView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/pacientes/PacientesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/PacientesView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/pacientes/TableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/TableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/AgregarMedicamento.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/AgregarMedicamento.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/AgregarMedicamento.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/AgregarMedicamento.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/BuscarPaciente.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/BuscarPaciente.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/BuscarPaciente.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/BuscarPaciente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/MedicamentosTableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/MedicamentosTableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/Model.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/ModificarDetalle.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/ModificarDetalle.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/ModificarDetalle.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/ModificarDetalle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/PrescripcionView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/PrescripcionView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/PrescripcionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/PrescripcionView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/hospital/presentation/prescripcion/RecetaTableModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/RecetaTableModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/database.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Protocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Protocol.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,21 +25,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "GabeQV"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;GabeQV&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/GabeQV/Proyecto-2-Progra-3.git",
-    "accountId": "0bbc1bbd-0faf-4967-91e6-76f898cc281f"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/GabeQV/Proyecto-2-Progra-3.git&quot;,
+    &quot;accountId&quot;: &quot;0bbc1bbd-0faf-4967-91e6-76f898cc281f&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="34l7YgvvZjrFoIUn7tC571KhWcl" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -143,7 +50,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "dev-Gabe",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/gabeq/OneDrive/Documents/Codes/Proyecto-2-Progra-3/Proyecto-2-Progra-3/Backend/src/main/java/hospital/logic",
     "node.js.detected.package.eslint": "true",
@@ -182,6 +89,7 @@
       <option name="presentableId" value="Default" />
       <updated>1761776353870</updated>
       <workItem from="1761776354958" duration="2159000" />
+      <workItem from="1761781439692" duration="3894000" />
     </task>
     <servers />
   </component>
@@ -191,11 +99,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Frontend/src/main/java/hospital/Frontend_Main.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Protocol/src/main/java/hospital/Main.java</url>
           <line>13</line>
