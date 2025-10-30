@@ -47,7 +47,6 @@ public class FarmaceutaDao {
         } finally {
             if (cnx != null) {
                 cnx.setAutoCommit(true);
-                cnx.close();
             }
         }
     }

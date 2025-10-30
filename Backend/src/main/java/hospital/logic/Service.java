@@ -23,7 +23,8 @@ public class Service {
     private RecetasDao recetasDao;
     private MedicamentosDao medicamentosDao;
 
-    Service() {
+    // CORRECCIÓN: Constructor ahora es privado para forzar el patrón Singleton.
+    private Service() {
         try {
             medicoDao = new MedicoDao();
             farmaceutaDao = new FarmaceutaDao();
@@ -31,11 +32,9 @@ public class Service {
             recetasDao = new RecetasDao();
             medicamentosDao = new MedicamentosDao();
         } catch (Exception e) {
+            System.err.println("Error fatal al inicializar DAOs: " + e.getMessage());
             System.exit(-1);
         }
-    }
-
-    public void stop() {
     }
 
     // =============== MEDICOS ===============
@@ -50,7 +49,6 @@ public class Service {
     }
     public void updateMedico(Medico e) throws Exception {
         medicoDao.update(e);
-        stop();
     }
     public List<Medico> findAllMedicos() {
         Medico filtro = new Medico();
@@ -70,7 +68,7 @@ public class Service {
     }
     public void updateFarmaceuta(Farmaceuta e) throws Exception {
         farmaceutaDao.update(e);
-        stop();
+
     }
     public List<Farmaceuta> findAllFarmaceutas() {
         Farmaceuta filtro = new Farmaceuta();
@@ -90,7 +88,7 @@ public class Service {
     }
     public void updatePaciente(Paciente e) throws Exception {
         pacienteDao.update(e);
-        stop();
+
     }
     public List<Paciente> findAllPacientes() {
         Paciente filtro = new Paciente();
@@ -138,7 +136,6 @@ public class Service {
     }
     public void updateMedicamento(Medicamento e) throws Exception {
         medicamentosDao.update(e);
-        stop();
     }
     public List<Medicamento> findMedicamentosByNombre(String nombre) {
         Medicamento filtro = new Medicamento();
@@ -162,7 +159,6 @@ public class Service {
     // =============== AUTENTICACIÓN Y CONTRASEÑA ===============
 
     public Usuario login(String id, String clave) throws Exception {
-        // Admin local
         if ("ADM".equals(id) && "ADM".equals(clave)) return new Admin();
 
         Connection conn = null;

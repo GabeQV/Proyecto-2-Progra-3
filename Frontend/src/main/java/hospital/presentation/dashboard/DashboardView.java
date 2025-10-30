@@ -3,7 +3,6 @@ package hospital.presentation.dashboard;
 import com.github.lgooddatepicker.components.DatePicker;
 import hospital.logic.Medicamento;
 import hospital.logic.Receta;
-import hospital.logic.Service;
 
 import javax.swing.*;
 import java.awt.*;

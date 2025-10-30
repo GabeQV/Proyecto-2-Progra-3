@@ -1,14 +1,22 @@
 package hospital.logic;
 
+import hospital.presentation.ThreadListener;
 import hospital.presentation.despacho.DespachoView;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Sesion {
+public class Sesion implements ThreadListener {
     private static Sesion theInstance;
     private Usuario usuarioActual;
+
+    private hospital.presentation.catalogo.Controller catalogoController;
+    private hospital.presentation.despacho.Controller despachoController;
+    private hospital.presentation.historico_recetas.Controller historicoController;
+    private hospital.presentation.medicos.Controller medicosController;
+    private hospital.presentation.farmaceutas.Controller farmaceutasController;
+    private hospital.presentation.pacientes.Controller pacientesController;
 
     public static Sesion instance() {
         if (theInstance == null) theInstance = new Sesion();
@@ -23,6 +31,37 @@ public class Sesion {
 
     public Usuario getUsuarioActual() {
         return usuarioActual;
+    }
+
+    @Override
+    public void deliver_message(String message) {
+        SwingUtilities.invokeLater(() -> {
+            System.out.println("NOTIFICACIÓN RECIBIDA: " + message);
+            try {
+                switch(message) {
+                    case "UPDATE_MEDICAMENTOS":
+                        if (catalogoController != null) catalogoController.refreshList();
+                        break;
+                    case "UPDATE_RECETAS":
+                        if (despachoController != null) despachoController.refreshList();
+                        if (historicoController != null) historicoController.refreshList();
+                        break;
+                    case "UPDATE_PACIENTES":
+                        if (pacientesController != null) pacientesController.refreshList();
+                        break;
+                    case "UPDATE_MEDICOS":
+                        if (medicosController != null) medicosController.refreshList();
+                        break;
+                    case "UPDATE_FARMACEUTAS":
+                        if (farmaceutasController != null) farmaceutasController.refreshList();
+                        break;
+                }
+                // Opcional: mostrar un pequeño popup de notificación
+                // JOptionPane.showMessageDialog(null, "Datos actualizados: " + message, "Actualización", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                System.err.println("Error al refrescar la vista tras notificación: " + e.getMessage());
+            }
+        });
     }
 
     private void addAdminTabs(JTabbedPane tabbedPane) {
@@ -115,27 +154,19 @@ public class Sesion {
         Usuario user = getUsuarioActual();
         if (user == null) return;
 
+        Service.instance().setListener(this);
+
         JFrame mainWindow = new JFrame();
         mainWindow.setSize(1000,500);
-        mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mainWindow.setTitle("Hospital" + " " + user.getNombre() + " " + user.getId());
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        switch(user.getTipo()) {
-            case "ADMINISTRADOR":
-                addAdminTabs(tabbedPane);
-                break;
-
-            case "MEDICO":
-                addMedicoTabs(tabbedPane);
-                break;
-
-            case "FARMACEUTA":
-                addFarmaceutaTabs(tabbedPane);
-                break;
-            default:
-                break;
+        switch (user.getTipo()) {
+            case "ADMINISTRADOR": addAdminTabs(tabbedPane); break;
+            case "MEDICO": addMedicoTabs(tabbedPane); break;
+            case "FARMACEUTA": addFarmaceutaTabs(tabbedPane); break;
         }
 
         mainWindow.setContentPane(tabbedPane);
@@ -145,6 +176,7 @@ public class Sesion {
             @Override
             public void windowClosing(WindowEvent e) {
                 Service.instance().stop();
+                System.exit(0);
             }
         });
         mainWindow.setVisible(true);

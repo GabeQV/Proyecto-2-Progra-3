@@ -22,33 +22,31 @@ public class Service {
     private ObjectOutputStream os;
     private ObjectInputStream is;
 
-    // Streams para el canal Asíncrono (notificaciones del servidor)
     private Socket as;
     private ObjectOutputStream aos;
     private ObjectInputStream ais;
 
     private String sid; // Session ID
-    private ThreadListener listener; // Referencia a la GUI para notificarla
+    private ThreadListener listener;
 
     private Service() {
         try {
-            // 1. Conectar canal síncrono
+
             s = new Socket(Protocol.SERVER, Protocol.PORT);
             os = new ObjectOutputStream(s.getOutputStream());
             is = new ObjectInputStream(s.getInputStream());
             os.writeInt(Protocol.SYNC);
             os.flush();
-            sid = (String) is.readObject(); // Recibir Session ID del servidor
+            sid = (String) is.readObject();
 
-            // 2. Conectar canal asíncrono
+
             as = new Socket(Protocol.SERVER, Protocol.PORT);
             aos = new ObjectOutputStream(as.getOutputStream());
             ais = new ObjectInputStream(as.getInputStream());
             aos.writeInt(Protocol.ASYNC);
-            aos.writeObject(sid); // Enviar Session ID para que el servidor nos identifique
+            aos.writeObject(sid);
             aos.flush();
 
-            // 3. Iniciar hilo que escucha notificaciones del servidor
             startListening();
 
         } catch (Exception e) {
@@ -79,7 +77,7 @@ public class Service {
                 System.err.println("Se perdió la conexión asíncrona con el servidor.");
             }
         });
-        t.setDaemon(true); // El hilo no impedirá que la aplicación se cierre
+        t.setDaemon(true);
         t.start();
     }
 
@@ -90,7 +88,6 @@ public class Service {
             s.shutdownOutput();
             s.close();
         } catch (Exception e) {
-            // Ignorar errores al desconectar
         }
     }
 
@@ -232,35 +229,151 @@ public class Service {
         }
     }
 
-    // ... Implementa aquí los métodos para PACIENTES, MEDICOS, FARMACEUTAS de forma similar ...
-    // Por simplicidad, los he omitido, pero la estructura es idéntica.
-    // Ejemplo:
-    public List<Paciente> findAllPacientes() throws Exception {
-        // Debes implementar la lógica similar a findAllMedicamentos
-        return Collections.emptyList(); // Placeholder
+    // =============== MEDICOS ===============
+    public void createMedico(Medico e) throws Exception {
+        os.writeInt(Protocol.MEDICO_CREATE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
+    }
+
+    public void updateMedico(Medico e) throws Exception {
+        os.writeInt(Protocol.MEDICO_UPDATE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
     }
 
     public List<Medico> findAllMedicos() throws Exception {
-        return Collections.emptyList(); // Placeholder
+        os.writeInt(Protocol.MEDICO_FIND_ALL);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (List<Medico>) is.readObject();
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    public Medico readMedico(Medico e) throws Exception {
+        os.writeInt(Protocol.MEDICO_READ);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (Medico) is.readObject();
+        } else {
+            throw new Exception("Medico no encontrado");
+        }
+    }
+
+    public void deleteMedico(Medico e) throws Exception {
+        os.writeInt(Protocol.MEDICO_DELETE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
+    }
+
+    // =============== FARMACEUTAS ===============
+    public void createFarmaceuta(Farmaceuta e) throws Exception {
+        os.writeInt(Protocol.FARMACEUTA_CREATE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
+    }
+
+    public void updateFarmaceuta(Farmaceuta e) throws Exception {
+        os.writeInt(Protocol.FARMACEUTA_UPDATE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
     }
 
     public List<Farmaceuta> findAllFarmaceutas() throws Exception {
-        return Collections.emptyList(); // Placeholder
+        os.writeInt(Protocol.FARMACEUTA_FIND_ALL);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (List<Farmaceuta>) is.readObject();
+        } else {
+            return Collections.emptyList();
+        }
     }
 
-    public Paciente readPaciente(Paciente p) throws Exception {
-        return null; // Placeholder
+    public Farmaceuta readFarmaceuta(Farmaceuta e) throws Exception {
+        os.writeInt(Protocol.FARMACEUTA_READ);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (Farmaceuta) is.readObject();
+        } else {
+            throw new Exception("Farmaceuta no encontrado");
+        }
     }
 
-    public void createPaciente(Paciente p) throws Exception {
-        // Placeholder
+    public void deleteFarmaceuta(Farmaceuta e) throws Exception {
+        os.writeInt(Protocol.FARMACEUTA_DELETE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
     }
 
-    public void updatePaciente(Paciente p) throws Exception {
-        // Placeholder
+    // =============== PACIENTES ===============
+    public void createPaciente(Paciente e) throws Exception {
+        os.writeInt(Protocol.PACIENTE_CREATE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
     }
 
-    public void deletePaciente(Paciente p) throws Exception {
-        // Placeholder
+    public void updatePaciente(Paciente e) throws Exception {
+        os.writeInt(Protocol.PACIENTE_UPDATE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
     }
+
+    public List<Paciente> findAllPacientes() throws Exception {
+        os.writeInt(Protocol.PACIENTE_FIND_ALL);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (List<Paciente>) is.readObject();
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    public Paciente readPaciente(Paciente e) throws Exception {
+        os.writeInt(Protocol.PACIENTE_READ);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (Paciente) is.readObject();
+        } else {
+            throw new Exception("Paciente no encontrado");
+        }
+    }
+
+    public void deletePaciente(Paciente e) throws Exception {
+        os.writeInt(Protocol.PACIENTE_DELETE);
+        os.writeObject(e);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
+    }
+
 }

@@ -1,8 +1,6 @@
 package hospital.presentation.pacientes;
 
 import hospital.logic.Paciente;
-import hospital.logic.Service;
-
 
 public class Controller {
     PacientesView view;
@@ -13,46 +11,44 @@ public class Controller {
         this.model = model;
         view.setController(this);
         view.setModel(model);
-        model.setList(Service.instance().findAllPacientes());
+        try {
+            this.refreshList();
+        } catch (Exception e) {
+            System.err.println("Error cargando la lista inicial de pacientes: " + e.getMessage());
+        }
     }
 
-    public void create(Paciente e) throws  Exception{
-        try {
-            Service.instance().createPaciente(e);
-        } catch (Exception ex) {
-            if ("Paciente ya existe".equals(ex.getMessage())) {
-                Service.instance().updatePaciente(e);
-            } else {
-                throw ex;
-            }
-        }
+    public void create(Paciente e) throws Exception {
+        Service.instance().createPaciente(e);
         model.setCurrent(new Paciente());
-        model.setList(Service.instance().findAllPacientes());
+    }
+
+    public void update(Paciente e) throws Exception {
+        Service.instance().updatePaciente(e);
+        model.setCurrent(new Paciente());
     }
 
     public void read(String id) throws Exception {
         Paciente e = new Paciente();
         e.setId(id);
-        if(Service.instance().readPaciente(e)!=null){
-            try {
-                model.setCurrent(Service.instance().readPaciente(e));
-            } catch (Exception ex) {
-                Paciente b = new Paciente();
-                b.setId(id);
-                model.setCurrent(b);
-                throw ex;
-            }
-        }
+        Paciente result = Service.instance().readPaciente(e);
+        model.setCurrent(result);
+    }
 
+    public void delete(Paciente e) throws Exception {
+        Service.instance().deletePaciente(e);
+        model.setCurrent(new Paciente());
     }
 
     public void clear() {
         model.setCurrent(new Paciente());
     }
 
-    public void delete(Paciente e) throws Exception{
-        Service.instance().deletePaciente(e);
-        model.setCurrent(new Paciente());
-        model.setList(Service.instance().findAllPacientes());
+    public void refreshList() {
+        try {
+            model.setList(Service.instance().findAllPacientes());
+        } catch (Exception e) {
+            System.err.println("Error refrescando la lista de pacientes: " + e.getMessage());
+        }
     }
 }

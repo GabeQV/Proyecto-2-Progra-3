@@ -1,50 +1,41 @@
 package hospital.presentation.prescripcion;
 
 import hospital.logic.Medicamento;
-import hospital.logic.Service;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.util.Collections;
 import java.util.List;
 
-public class AgregarMedicamento extends JDialog implements PropertyChangeListener {
+public class AgregarMedicamento extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JComboBox comboBox1;
+    private JComboBox<String> comboBox1;
     private JTextField textField1;
     private JTable medicamentosTable;
 
     Model model;
-    Medicamento medicamento;
 
     public AgregarMedicamento(JFrame parent, Model model) {
         super(parent, "Agregar Medicamento", true);
+        this.model = model;
+
         setContentPane(contentPane);
         setSize(500, 300);
         setLocationRelativeTo(parent);
 
-        parent.setVisible(true);
-        parent.setLocationRelativeTo(null);
-        this.model = model;
-        medicamento = new Medicamento();
+        try {
+            int[] cols = {MedicamentosTableModel.ID, MedicamentosTableModel.NOMBRE, MedicamentosTableModel.PRESENTACION};
+            medicamentosTable.setModel(new MedicamentosTableModel(cols, Service.instance().findAllMedicamentos()));
+        } catch (Exception e) {
+            System.err.println("Error al cargar medicamentos en el diálogo: " + e.getMessage());
+            medicamentosTable.setModel(new MedicamentosTableModel(new int[]{}, Collections.emptyList()));
+        }
 
-        int[] cols = {MedicamentosTableModel.ID, MedicamentosTableModel.PRESENTACION, MedicamentosTableModel.NOMBRE};
-        medicamentosTable.setModel(new MedicamentosTableModel(cols, Service.instance().findAllMedicamentos()));
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
+        buttonCancel.addActionListener(e -> onCancel());
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -53,21 +44,13 @@ public class AgregarMedicamento extends JDialog implements PropertyChangeListene
             }
         });
 
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         medicamentosTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && medicamentosTable.getSelectedRow() != -1) {
-                    Medicamento seleccionado = ((MedicamentosTableModel) medicamentosTable.getModel()).getRowAt(medicamentosTable.getSelectedRow());
-                    medicamento = ((MedicamentosTableModel)medicamentosTable.getModel()).getRowAt(medicamentosTable.getSelectedRow());
-                    model.getCurrentReceta().setMedicamento(medicamento);
-                    model.setCurrentReceta(model.getCurrentReceta());
-                    dispose();
+                    onOK();
                 }
             }
         });
@@ -86,17 +69,22 @@ public class AgregarMedicamento extends JDialog implements PropertyChangeListene
         String tipoBusqueda = (String) comboBox1.getSelectedItem();
         List<Medicamento> result;
 
-        if (criterio.isEmpty()) {
-            result = Service.instance().findAllMedicamentos();
-        } else {
-            if ("Nombre".equals(tipoBusqueda)) {
-                result = Service.instance().findMedicamentosByNombre(criterio);
+        try {
+            if (criterio.isEmpty()) {
+                result = Service.instance().findAllMedicamentos();
             } else {
-                result = Service.instance().findMedicamentosByCodigo(criterio);
+                if ("Nombre".equals(tipoBusqueda)) {
+                    result = Service.instance().findMedicamentosByNombre(criterio);
+                } else {
+                    result = Service.instance().findMedicamentosByCodigo(criterio);
+                }
             }
+            int[] cols = {MedicamentosTableModel.ID, MedicamentosTableModel.NOMBRE, MedicamentosTableModel.PRESENTACION};
+            medicamentosTable.setModel(new MedicamentosTableModel(cols, result));
+        } catch (Exception ex) {
+            System.err.println("Error buscando medicamentos: " + ex.getMessage());
+            medicamentosTable.setModel(new MedicamentosTableModel(new int[]{}, Collections.emptyList()));
         }
-        int[] cols = {MedicamentosTableModel.ID, MedicamentosTableModel.NOMBRE, MedicamentosTableModel.PRESENTACION};
-        medicamentosTable.setModel(new MedicamentosTableModel(cols, result));
     }
 
     private void onOK() {
@@ -111,19 +99,5 @@ public class AgregarMedicamento extends JDialog implements PropertyChangeListene
 
     private void onCancel() {
         dispose();
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        switch (evt.getPropertyName()) {
-            case Model.LIST:
-                int[] cols = {MedicamentosTableModel.ID, MedicamentosTableModel.PRESENTACION, MedicamentosTableModel.NOMBRE};
-                medicamentosTable.setModel(new MedicamentosTableModel(cols, Service.instance().findAllMedicamentos()));
-                break;
-            case Model.CURRENT_RECETA:
-                model.getCurrentReceta().setMedicamento(medicamento);
-                break;
-
-        }
     }
 }

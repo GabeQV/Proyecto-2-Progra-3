@@ -1,23 +1,12 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package hospital.logic;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlID;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Medicamento {
-    @XmlElement
-    @XmlID
+
     private String id;
-    @XmlElement
+
     private String nombre;
-    @XmlElement
+
     private String presentacion;
 
     public Medicamento() {

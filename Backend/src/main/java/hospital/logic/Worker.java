@@ -88,6 +88,15 @@ public class Worker {
                         break;
 
                     // ------------ MEDICAMENTOS ------------
+                    case Protocol.MEDICAMENTO_READ:
+                        try {
+                            Medicamento e = service.readMedicamento((Medicamento) is.readObject());
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                            os.writeObject(e);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                        }
+                        break;
                     case Protocol.MEDICAMENTO_CREATE:
                         try {
                             service.createMedicamento((Medicamento) is.readObject());
@@ -149,6 +158,15 @@ public class Worker {
                         break;
 
                     // ------------ RECETAS ------------
+                    case Protocol.RECETA_READ:
+                        try {
+                            Receta e = service.readReceta((Receta) is.readObject());
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                            os.writeObject(e);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                        }
+                        break;
                     case Protocol.RECETA_CREATE:
                         try {
                             service.createReceta((Receta) is.readObject());
@@ -189,6 +207,15 @@ public class Worker {
                         }
                         break;
                     // ------------ MEDICOS ------------
+                    case Protocol.MEDICO_READ:
+                        try {
+                            Medico e = service.readMedico((Medico) is.readObject());
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                            os.writeObject(e);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                        }
+                        break;
                     case Protocol.MEDICO_CREATE:
                         try {
                             service.createMedico((Medico) is.readObject());
@@ -230,6 +257,15 @@ public class Worker {
                         break;
 
                         //------------ PACIENTES ------------
+                    case Protocol.PACIENTE_READ:
+                        try {
+                            Paciente e = service.readPaciente((Paciente) is.readObject());
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                            os.writeObject(e);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                        }
+                        break;
 
                     case Protocol.PACIENTE_CREATE:
                         try {
@@ -272,6 +308,15 @@ public class Worker {
                         break;
 
                         //------------ FARMACEUTAS ------------
+                    case Protocol.FARMACEUTA_READ:
+                        try {
+                            Farmaceuta e = service.readFarmaceuta((Farmaceuta) is.readObject());
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                            os.writeObject(e);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                        }
+                        break;
 
                     case Protocol.FARMACEUTA_CREATE:
                         try {
@@ -320,10 +365,6 @@ public class Worker {
                 os.flush();
             } catch (IOException e) {
                 System.err.println("Error de IO en worker, cerrando conexión: " + e.getMessage());
-                stop();
-                srv.remove(this);
-            } catch (ClassNotFoundException e) {
-                System.err.println("Error de clase no encontrada: " + e.getMessage());
                 stop();
                 srv.remove(this);
             }
