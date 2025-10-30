@@ -1,8 +1,6 @@
 package hospital.presentation.historico_recetas;
 
-
 import hospital.logic.Receta;
-import hospital.logic.Service;
 
 import java.util.List;
 
@@ -15,34 +13,19 @@ public class Controller {
         this.model = model;
         view.setController(this);
         view.setModel(model);
-        model.setList(Service.instance().findAllRecetas());
-    }
-
-    public void create(Receta e) throws Exception {
-        Service.instance().createReceta(e);
-        model.setCurrent(new Receta());
-        model.setList(Service.instance().findAllRecetas());
-    }
-
-    public void read(String id) throws Exception {
-        Receta r = new Receta();
-        r.setId(id);
         try {
-            model.setCurrent(Service.instance().readReceta(r));
-        } catch (Exception ex) {
-            Receta empty = new Receta();
-            empty.setId(id);
-            model.setCurrent(empty);
-            throw ex;
+            refreshList();
+        } catch (Exception e) {
+            System.err.println("Error cargando histórico de recetas: " + e.getMessage());
         }
     }
 
-    public void clear() {
-        model.setList(Service.instance().findAllRecetas());
+    public void clear() throws Exception {
+        refreshList();
         model.setCurrent(new Receta());
     }
 
-    public boolean searchByPacienteId(String pacienteId) {
+    public boolean searchByPacienteId(String pacienteId) throws Exception {
         List<Receta> list = Service.instance().findRecetasByPacienteId(pacienteId);
         model.setList(list);
         if (!list.isEmpty()) {
@@ -54,19 +37,16 @@ public class Controller {
         }
     }
 
-    public boolean searchByRecetaId(String recetaId) {
-        List<Receta> list = new java.util.ArrayList<>();
-        try {
-            Receta r = new Receta();
-            r.setId(recetaId);
-            Receta result = Service.instance().readReceta(r);
-            if (result != null) {
-                list.add(result);
-                model.setCurrent(result);
-            }
-        } catch (Exception ex) {
-        }
-        model.setList(list);
-        return !list.isEmpty();
+    public boolean searchByRecetaId(String recetaId) throws Exception {
+        Receta r = new Receta();
+        r.setId(recetaId);
+        Receta result = Service.instance().readReceta(r);
+        model.setList(List.of(result));
+        model.setCurrent(result);
+        return true;
+    }
+
+    public void refreshList() throws Exception {
+        model.setList(Service.instance().findAllRecetas());
     }
 }

@@ -1,21 +1,13 @@
 package hospital.logic;
 
-import hospital.data.LocalDateAdapter;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlID;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import java.time.LocalDate;
 
-@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Paciente{
 
-    @XmlID
     protected String id;
     protected String nombre;
 
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     protected LocalDate fechaNacimiento;
     private String telefono;
 

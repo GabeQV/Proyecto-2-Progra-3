@@ -1,6 +1,5 @@
 package hospital.presentation.login;
 
-import hospital.logic.Service;
 import hospital.logic.Sesion;
 import hospital.logic.Usuario;
 

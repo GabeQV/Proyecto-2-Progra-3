@@ -4,7 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="190002d2-5dbf-47a5-b33e-4d96a9ca67c5" name="Changes" comment="" />
+    <list default="true" id="190002d2-5dbf-47a5-b33e-4d96a9ca67c5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/FarmaceutaDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/FarmaceutaDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/MedicoDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/MedicoDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Worker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/Frontend_Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/Frontend_Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/catalogo/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/farmaceutas/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/historico_recetas/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/LoginView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/CambioClaveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/CambioClaveView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/login/cambio_clave/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/medicos/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/pacientes/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/AgregarMedicamento.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/AgregarMedicamento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/BuscarPaciente.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/BuscarPaciente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/prescripcion/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Farmaceuta.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Farmaceuta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medicamento.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medicamento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medico.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Medico.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Paciente.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Paciente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Receta.java" beforeDir="false" afterPath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Receta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Service.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Protocol/src/main/java/hospital/logic/Sesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/logic/Sesion.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,12 +66,13 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Backend.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;dev-Gabe&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/gabeq/OneDrive/Documents/Codes/Proyecto-2-Progra-3/Proyecto-2-Progra-3/Backend/src/main/java/hospital/logic&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gabeq/OneDrive/Documents/Codes/Proyecto-2-Progra-3/Proyecto-2-Progra-3/Frontend/src/main/java/hospital/logic&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -52,6 +84,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Frontend\src\main\java\hospital\logic" />
       <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Backend\src\main\java\hospital\logic" />
       <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Frontend\src\main\java\hospital\presentation" />
       <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Protocol\src\main\java\hospital\logic" />
@@ -61,17 +94,45 @@
       <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Proyecto-2-Progra-3\Protocol\src\main\java\Hospital" />
     </key>
   </component>
+  <component name="RunManager" selected="Application.Backend">
+    <configuration name="Backend" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="hospital.Backend_Main" />
+      <module name="Backend" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Frontend_1" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="hospital.Frontend_Main" />
+      <module name="Frontend" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Frontend_2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="hospital.Frontend_Main" />
+      <module name="Frontend" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Backend" />
+      <item itemvalue="Application.Frontend_1" />
+      <item itemvalue="Application.Frontend_2" />
+    </list>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.28293.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.28293.39" />
       </set>
     </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c68b5e57-6488-4d4c-ad59-4aa1fa33b33c" name="Changes" comment="" />
+      <changelist id="190002d2-5dbf-47a5-b33e-4d96a9ca67c5" name="Changes" comment="" />
       <created>1760321793767</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -79,12 +140,25 @@
       <workItem from="1761776354958" duration="2159000" />
       <workItem from="1761781439692" duration="3894000" />
       <workItem from="1761785541319" duration="2000" />
+      <workItem from="1761786066553" duration="7908000" />
+      <workItem from="1761794067025" duration="700000" />
     </task>
     <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

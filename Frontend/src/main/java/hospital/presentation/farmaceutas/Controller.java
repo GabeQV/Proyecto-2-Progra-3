@@ -1,7 +1,6 @@
 package hospital.presentation.farmaceutas;
 
 import hospital.logic.Farmaceuta;
-import hospital.logic.Service;
 
 public class Controller {
     FarmaceutasView view;
@@ -12,46 +11,40 @@ public class Controller {
         this.model = model;
         view.setController(this);
         view.setModel(model);
-        model.setList(Service.instance().findAllFarmaceutas());
+        try {
+            refreshList();
+        } catch (Exception e) {
+            System.err.println("Error cargando farmaceutas: " + e.getMessage());
+        }
     }
 
     public void create(Farmaceuta e) throws  Exception{
-        try {
-            Service.instance().createFarmaceuta(e);
-        } catch (Exception ex) {
-            if ("Farmaceuta ya existe".equals(ex.getMessage())) {
-                Service.instance().updateFarmaceuta(e);
-            } else {
-                throw ex;
-            }
-        }
+        Service.instance().createFarmaceuta(e);
         model.setCurrent(new Farmaceuta());
-        model.setList(Service.instance().findAllFarmaceutas());
     }
 
-    public void read(String id) throws Exception {
-        Farmaceuta e = new Farmaceuta();
-        e.setId(id);
-        if(Service.instance().readFarmaceuta(e)!=null){
-            try {
-                model.setCurrent(Service.instance().readFarmaceuta(e));
-            } catch (Exception ex) {
-                Farmaceuta b = new Farmaceuta();
-                b.setId(id);
-                model.setCurrent(b);
-                throw ex;
-            }
-        }
-
-    }
-
-    public void clear() {
+    public void update(Farmaceuta e) throws Exception {
+        Service.instance().updateFarmaceuta(e);
         model.setCurrent(new Farmaceuta());
     }
 
     public void delete(Farmaceuta e) throws Exception{
         Service.instance().deleteFarmaceuta(e);
         model.setCurrent(new Farmaceuta());
+    }
+
+    public void clear() {
+        model.setCurrent(new Farmaceuta());
+    }
+
+    public void read(String id) throws Exception {
+        Farmaceuta e = new Farmaceuta();
+        e.setId(id);
+        Farmaceuta result = Service.instance().readFarmaceuta(e);
+        model.setCurrent(result);
+    }
+
+    public void refreshList() throws Exception {
         model.setList(Service.instance().findAllFarmaceutas());
     }
 }

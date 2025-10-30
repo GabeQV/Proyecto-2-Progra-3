@@ -49,7 +49,6 @@ public class MedicoDao {
         } finally {
             if (cnx != null) {
                 cnx.setAutoCommit(true);
-                cnx.close();
             }
         }
     }
