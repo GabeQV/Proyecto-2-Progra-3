@@ -3,6 +3,7 @@ package hospital.data;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,9 +28,11 @@ public class Database {
     public Connection getConnection(){
         try {
             Properties prop = new Properties();
-            URL resourceUrl = getClass().getResource(PROPERTIES_FILE_NAME);
-            File file = new File(resourceUrl.toURI());
-            prop.load(new BufferedInputStream(new FileInputStream(file)));
+            InputStream stream = getClass().getResourceAsStream(PROPERTIES_FILE_NAME);
+            if (stream == null) {
+                throw new RuntimeException("No se pudo encontrar el archivo de propiedades: " + PROPERTIES_FILE_NAME);
+            }
+            prop.load(stream);
             String driver = prop.getProperty("database_driver");
             String server = prop.getProperty("database_server");
             String port = prop.getProperty("database_port");
@@ -57,7 +60,7 @@ public class Database {
             statement.executeUpdate();
             return statement.getUpdateCount();
         } catch (SQLException ex) {
-            throw new RuntimeException(ex); // No silenciar
+            throw new RuntimeException(ex);
         }
     }
 
@@ -65,7 +68,7 @@ public class Database {
         try {
             return statement.executeQuery();
         } catch (SQLException ex) {
-            throw new RuntimeException(ex); // No devolver null
+            throw new RuntimeException(ex);
         }
     }
 
