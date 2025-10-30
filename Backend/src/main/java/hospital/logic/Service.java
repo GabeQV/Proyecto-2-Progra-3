@@ -213,16 +213,17 @@ public class Service {
         if ("ADM".equals(id)) throw new Exception("No es posible cambiar la clave del administrador.");
 
         Connection conn = null;
-        PreparedStatement stmt = null;
+        PreparedStatement stmtSelect = null;
+        PreparedStatement stmtUpdate = null;
         ResultSet rs = null;
 
         try {
             conn = Database.instance().getConnection();
 
-            String sql = "SELECT claveUsuario FROM usuarios WHERE idUsuario = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, id);
-            rs = stmt.executeQuery();
+            String sqlSelect = "SELECT claveUsuario FROM usuarios WHERE idUsuario = ?";
+            stmtSelect = conn.prepareStatement(sqlSelect);
+            stmtSelect.setString(1, id);
+            rs = stmtSelect.executeQuery();
 
             if (!rs.next()) throw new Exception("Usuario no encontrado");
 
@@ -231,14 +232,14 @@ public class Service {
             if (!nuevaClave.equals(nuevaClaveConfirm)) throw new Exception("La nueva clave no coincide");
 
             rs.close();
-            stmt.close();
+            stmtSelect.close();
 
-            sql = "UPDATE usuarios SET claveUsuario = ? WHERE idUsuario = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nuevaClave);
-            stmt.setString(2, id);
+            String sqlUpdate = "UPDATE usuarios SET claveUsuario = ? WHERE idUsuario = ?";
+            stmtUpdate = conn.prepareStatement(sqlUpdate);
+            stmtUpdate.setString(1, nuevaClave);
+            stmtUpdate.setString(2, id);
 
-            int filas = stmt.executeUpdate();
+            int filas = stmtUpdate.executeUpdate();
             if (filas == 0) throw new Exception("No se pudo actualizar la clave.");
 
         } catch (SQLException e) {
@@ -246,7 +247,8 @@ public class Service {
             throw new Exception("Error de base de datos: " + e.getMessage());
         } finally {
             if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException ignored) {}
+            if (stmtSelect != null) try { stmtSelect.close(); } catch (SQLException ignored) {}
+            if (stmtUpdate != null) try { stmtUpdate.close(); } catch (SQLException ignored) {}
             if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
         }
     }
