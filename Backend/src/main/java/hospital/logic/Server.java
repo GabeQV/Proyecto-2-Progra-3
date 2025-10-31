@@ -114,4 +114,17 @@ public class Server {
                 .collect(Collectors.toList());
     }
 
+    public boolean deliver_dm(Usuario from, String toUserId, String text) {
+        Worker destino = workersPorUsuarioId.get(toUserId); // debes tener este mapa o derivarlo
+        if (destino == null) return false;
+        try {
+            ObjectOutputStream aos = destino.getAsyncOutput(); // expón un getter o mantén el stream en el Server
+            aos.writeInt(Protocol.DELIVER_MESSAGE);
+            aos.writeObject("DM|" + from.getId() + "|" + text);
+            aos.flush();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

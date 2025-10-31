@@ -60,5 +60,6 @@ public class Protocol {
     public static final int DELIVER_LOGOUT = 15;
 
     public static final int GET_CONNECTED_USERS = 701;
+    public static final int DM_ENVIAR = 702;
 
 }
