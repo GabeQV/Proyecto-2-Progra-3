@@ -162,49 +162,53 @@ public class Service {
         if ("ADM".equals(id) && "ADM".equals(clave)) return new Admin();
 
         Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        PreparedStatement stmtUsuario = null;
+        ResultSet rsUsuario = null;
+        PreparedStatement stmtMedico = null;
+        ResultSet rsMedico = null;
 
         try {
             conn = Database.instance().getConnection();
+            String sqlUsuario = "SELECT nombreUsuario, tipoUsuario FROM usuarios WHERE idUsuario = ? AND claveUsuario = ?";
+            stmtUsuario = conn.prepareStatement(sqlUsuario);
+            stmtUsuario.setString(1, id);
+            stmtUsuario.setString(2, clave);
+            rsUsuario = stmtUsuario.executeQuery();
 
-            String sql = "SELECT nombreUsuario, tipoUsuario FROM usuarios WHERE idUsuario = ? AND claveUsuario = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, id);
-            stmt.setString(2, clave);
-            rs = stmt.executeQuery();
-
-            if (!rs.next()) {
+            if (!rsUsuario.next()) {
                 throw new Exception("Usuario o clave incorrecta");
             }
 
-            String nombre = rs.getString("nombreUsuario");
-            String tipo = rs.getString("tipoUsuario");
+            String nombre = rsUsuario.getString("nombreUsuario");
+            String tipo = rsUsuario.getString("tipoUsuario");
+
+            rsUsuario.close();
+            stmtUsuario.close();
 
             switch (tipo) {
                 case "MEDICO":
-                    rs.close(); stmt.close();
-                    sql = "SELECT especialidad FROM medicos WHERE usuarios_idUsuario = ?";
-                    stmt = conn.prepareStatement(sql);
-                    stmt.setString(1, id);
-                    rs = stmt.executeQuery();
-                    if (rs.next()) {
-                        String esp = rs.getString("especialidad");
+                    String sqlMedico = "SELECT especialidad FROM medicos WHERE usuarios_idUsuario = ?";
+                    stmtMedico = conn.prepareStatement(sqlMedico);
+                    stmtMedico.setString(1, id);
+                    rsMedico = stmtMedico.executeQuery();
+                    if (rsMedico.next()) {
+                        String esp = rsMedico.getString("especialidad");
                         return new Medico(id, clave, nombre, esp != null ? esp : "");
                     }
                     break;
                 case "FARMACEUTA":
                     return new Farmaceuta(id, clave, nombre);
             }
-
             throw new Exception("El usuario no tiene un rol asignado válido (medico o farmaceuta).");
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Error de base de datos: " + e.getMessage());
         } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException ignored) {}
+            if (rsMedico != null) try { rsMedico.close(); } catch (SQLException ignored) {}
+            if (stmtMedico != null) try { stmtMedico.close(); } catch (SQLException ignored) {}
+            if (rsUsuario != null && !rsUsuario.isClosed()) try { rsUsuario.close(); } catch (SQLException ignored) {}
+            if (stmtUsuario != null && !stmtUsuario.isClosed()) try { stmtUsuario.close(); } catch (SQLException ignored) {}
             if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
         }
     }
