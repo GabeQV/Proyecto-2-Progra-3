@@ -43,22 +43,21 @@ public class Worker {
     boolean continuar;
 
     public void start() {
-        try {
-            System.out.println("Worker atendiendo peticiones...");
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    listen();
-                }
-            });
-            continuar = true;
-            t.start();
-        } catch (Exception ex) {
-        }
+        System.out.println("Worker " + sid + " atendiendo peticiones...");
+        Thread t = new Thread(this::listen);
+        continuar = true;
+        t.start();
     }
 
     public void stop() {
         continuar = false;
-        System.out.println("Conexion cerrada...");
+        try {
+            if (s != null && !s.isClosed()) s.close();
+            if (as != null && !as.isClosed()) as.close();
+        } catch (IOException e) {
+            System.err.println("Error al cerrar sockets para worker " + sid + ": " + e.getMessage());
+        }
+        System.out.println("Worker " + sid + " detenido.");
     }
 
     public void listen() {
@@ -388,15 +387,23 @@ public class Worker {
                         }
                         break;
                     case Protocol.DISCONNECT:
+                        if (user != null) srv.deliver_logout(this.user);
                         stop();
                         srv.remove(this);
                         break;
                 }
                 os.flush();
             } catch (IOException e) {
-                System.err.println("Error de IO en worker, cerrando conexión: " + e.getMessage());
-                stop();
-                srv.remove(this);
+                System.err.println("Worker " + sid + ": Conexión síncrona perdida. Esperando DISCONNECT...");
+                // No detenemos el worker, solo el canal síncrono ha muerto.
+                // El worker se detendrá cuando el cliente envíe DISCONNECT o el servidor se apague.
+                try {
+                    // Dormir un poco para no consumir CPU en un bucle apretado si la conexión se pierde.
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {}
+            } catch (Exception e) {
+                System.err.println("Worker " + sid + " error inesperado: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
