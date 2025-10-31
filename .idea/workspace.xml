@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56592d18-d783-4df6-9dd0-3a05744a0546" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/logic/Server.java" afterDir="false" />
-    </list>
+    <list default="true" id="56592d18-d783-4df6-9dd0-3a05744a0546" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,7 +73,7 @@
       <recent name="C:\Users\gabeq\OneDrive\Documents\Codes\Proyecto-2-Progra-3\Frontend\src\main\java\hospital\presentation\usuariosConectados" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Frontend2">
+  <component name="RunManager" selected="Application.Frontend1">
     <configuration name="Backend" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="hospital.Backend_Main" />
       <module name="Backend" />
@@ -120,7 +118,7 @@
       <updated>1761797971407</updated>
       <workItem from="1761797972573" duration="88000" />
       <workItem from="1761798074000" duration="2698000" />
-      <workItem from="1761870538387" duration="7675000" />
+      <workItem from="1761870538387" duration="8108000" />
     </task>
     <servers />
   </component>

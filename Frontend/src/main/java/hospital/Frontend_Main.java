@@ -25,7 +25,9 @@ public class Frontend_Main {
             JFrame window = new JFrame("Login - Sistema Hospital");
             LoginView loginView = new LoginView();
             window.setContentPane(loginView.getLoginPanel());
-            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
             window.pack();
             window.setLocationRelativeTo(null);
             window.setVisible(true);
