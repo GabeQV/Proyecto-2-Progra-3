@@ -88,17 +88,17 @@ public class Service {
         t.start();
     }
 
+    // === MÉTODO CORREGIDO / REINTRODUCIDO ===
     public void stop() {
         try {
             os.writeInt(Protocol.DISCONNECT);
             os.flush();
-            s.shutdownOutput();
-            s.close();
         } catch (Exception e) {
+            // Ignorar errores aquí, ya que estamos cerrando la conexión de todos modos.
         }
     }
 
-    // ----- MÉTODOS DE LÓGICA DE NEGOCIO -----
+    // ----- MÉTODOS DE LÓGICA DE NEGOCIO (SIN CAMBIOS) -----
 
     // =============== AUTENTICACIÓN ===============
     public Usuario login(String id, String clave) throws Exception {

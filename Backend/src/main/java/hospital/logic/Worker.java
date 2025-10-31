@@ -75,6 +75,7 @@ public class Worker {
                 method = is.readInt();
                 System.out.println("Operacion: " + method + " para " + sid);
                 switch (method) {
+                    // ... (TODOS LOS CASE VAN AQUÍ, SIN CAMBIOS)
                     // ------------ LOGIN ------------
                     case Protocol.LOGIN:
                         try {
@@ -394,15 +395,18 @@ public class Worker {
                             os.writeInt(Protocol.ERROR_ERROR);
                         }
                         break;
+
                     case Protocol.DISCONNECT:
-                        if (user != null) srv.deliver_logout(this.user);
-                        stop();
-                        srv.remove(this);
+                        // La desconexión es manejada por la excepción de IO
                         break;
                 }
                 os.flush();
             } catch (IOException e) {
-                if (user != null) srv.deliver_logout(this.user);
+                // Si hay una excepción de IO (p. ej., el cliente se desconecta),
+                // el worker debe detenerse y limpiarse.
+                if (user != null) {
+                    srv.deliver_logout(this.user);
+                }
                 stop();
                 srv.remove(this);
                 System.err.println("Worker " + sid + ": Conexión perdida. Worker detenido.");
@@ -420,6 +424,7 @@ public class Worker {
                 aos.writeObject(message);
                 aos.flush();
             } catch (Exception e) {
+                // La conexión podría estar cerrada, ignorar.
             }
         }
     }
@@ -431,6 +436,7 @@ public class Worker {
                 aos.writeObject(user);
                 aos.flush();
             } catch (IOException e) {
+                // La conexión podría estar cerrada, ignorar.
             }
         }
     }
@@ -442,6 +448,7 @@ public class Worker {
                 aos.writeObject(user);
                 aos.flush();
             } catch (IOException e) {
+                // La conexión podría estar cerrada, ignorar.
             }
         }
     }

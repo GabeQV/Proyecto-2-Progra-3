@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID; // <--- IMPORTANTE: Añadir esta importación
 import java.util.stream.Collectors;
 
 public class Server {
@@ -35,8 +36,10 @@ public class Server {
                 String sid;
                 switch (type) {
                     case Protocol.SYNC:
-                        sid = s.getRemoteSocketAddress().toString();
-                        System.out.println("SYNC: "+sid);
+                        // --- LA SOLUCIÓN DEFINITIVA ---
+                        // Generar un Session ID único y robusto.
+                        sid = UUID.randomUUID().toString();
+                        System.out.println("SYNC: " + sid);
 
                         Worker w = find(sid);
                         if (w == null) {
