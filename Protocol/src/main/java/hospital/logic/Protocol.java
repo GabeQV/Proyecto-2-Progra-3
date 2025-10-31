@@ -59,4 +59,6 @@ public class Protocol {
     public static final int DELIVER_LOGIN = 14;
     public static final int DELIVER_LOGOUT = 15;
 
+    public static final int GET_CONNECTED_USERS = 701;
+
 }

@@ -1,7 +1,5 @@
 package hospital.logic;
 
-import hospital.presentation.ThreadListener;
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -51,7 +49,6 @@ public class Service {
 
         } catch (Exception e) {
             System.err.println("Error al conectar con el servidor: " + e.getMessage());
-            // En una aplicación real, mostrarías un JOptionPane aquí.
             System.exit(-1);
         }
     }
@@ -65,16 +62,26 @@ public class Service {
             try {
                 while (true) {
                     int method = ais.readInt();
-                    if (method == Protocol.DELIVER_MESSAGE) {
-                        String message = (String) ais.readObject();
-                        if (listener != null) {
-                            // ¡Magia! Notificamos a la GUI que algo pasó.
-                            listener.deliver_message(message);
+                    if (listener != null) {
+                        switch (method) {
+                            case Protocol.DELIVER_MESSAGE:
+                                String message = (String) ais.readObject();
+                                listener.deliver_message(message);
+                                break;
+                            case Protocol.DELIVER_LOGIN:
+                                Usuario loggedInUser = (Usuario) ais.readObject();
+                                listener.deliver_login(loggedInUser);
+                                break;
+                            case Protocol.DELIVER_LOGOUT:
+                                Usuario loggedOutUser = (Usuario) ais.readObject();
+                                listener.deliver_logout(loggedOutUser);
+                                break;
                         }
                     }
                 }
             } catch (Exception e) {
                 System.err.println("Se perdió la conexión asíncrona con el servidor.");
+                e.printStackTrace();
             }
         });
         t.setDaemon(true);
@@ -106,6 +113,14 @@ public class Service {
         }
     }
 
+    public void logout() throws Exception {
+        os.writeInt(Protocol.LOGOUT);
+        os.flush();
+        if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
+    }
+
     public void cambiarClave(String id, String claveActual, String nuevaClave, String confirmarClave) throws Exception {
         os.writeInt(Protocol.CHANGE_PASSWORD);
         os.writeObject(id);
@@ -117,6 +132,18 @@ public class Service {
             throw new Exception((String) is.readObject());
         }
     }
+
+    // =============== USUARIOS CONECTADOS ===============
+    public List<Usuario> getConnectedUsers() throws Exception {
+        os.writeInt(Protocol.GET_CONNECTED_USERS);
+        os.flush();
+        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+            return (List<Usuario>) is.readObject();
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
 
     // =============== MEDICAMENTOS ===============
     public void createMedicamento(Medicamento e) throws Exception {

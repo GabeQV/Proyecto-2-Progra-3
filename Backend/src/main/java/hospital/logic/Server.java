@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Server {
     ServerSocket ss;
@@ -75,6 +76,25 @@ public class Server {
         for(Worker w:workers){
             w.deliver_message(message);
         }
+    }
+
+    public void deliver_login(Usuario user) {
+        for (Worker w : workers) {
+            w.deliver_login(user);
+        }
+    }
+
+    public void deliver_logout(Usuario user) {
+        for (Worker w : workers) {
+            w.deliver_logout(user);
+        }
+    }
+
+    public List<Usuario> getConnectedUsers() {
+        return workers.stream()
+                .filter(w -> w.getUser() != null)
+                .map(Worker::getUser)
+                .collect(Collectors.toList());
     }
 
 }

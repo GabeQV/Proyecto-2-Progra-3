@@ -1,6 +1,6 @@
 package hospital.logic;
 
-import hospital.presentation.ThreadListener;
+import hospital.logic.ThreadListener;
 import hospital.presentation.despacho.DespachoView;
 
 import javax.swing.*;
@@ -17,6 +17,8 @@ public class Sesion implements ThreadListener {
     private hospital.presentation.medicos.Controller medicosController;
     private hospital.presentation.farmaceutas.Controller farmaceutasController;
     private hospital.presentation.pacientes.Controller pacientesController;
+    private hospital.presentation.usuariosConectados.Controller usuariosConectadosController;
+
 
     public static Sesion instance() {
         if (theInstance == null) theInstance = new Sesion();
@@ -56,12 +58,36 @@ public class Sesion implements ThreadListener {
                         if (farmaceutasController != null) farmaceutasController.refreshList();
                         break;
                 }
-                // Opcional: mostrar un pequeño popup de notificación
-                // JOptionPane.showMessageDialog(null, "Datos actualizados: " + message, "Actualización", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 System.err.println("Error al refrescar la vista tras notificación: " + e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void deliver_login(Usuario user) {
+        SwingUtilities.invokeLater(() -> {
+            if (usuariosConectadosController != null) {
+                usuariosConectadosController.userLoggedIn(user);
+            }
+        });
+    }
+
+    @Override
+    public void deliver_logout(Usuario user) {
+        SwingUtilities.invokeLater(() -> {
+            if (usuariosConectadosController != null) {
+                usuariosConectadosController.userLoggedOut(user);
+            }
+        });
+    }
+
+    private void addSharedTabs(JTabbedPane tabbedPane) {
+        // MVC de Usuarios Conectados
+        hospital.presentation.usuariosConectados.UsuariosConectadosView usuariosView = new hospital.presentation.usuariosConectados.UsuariosConectadosView();
+        hospital.presentation.usuariosConectados.Model usuariosModel = new hospital.presentation.usuariosConectados.Model();
+        this.usuariosConectadosController = new hospital.presentation.usuariosConectados.Controller(usuariosView, usuariosModel);
+        tabbedPane.addTab("Usuarios", usuariosView.getUsuariosPanel());
     }
 
     private void addAdminTabs(JTabbedPane tabbedPane) {
@@ -104,6 +130,7 @@ public class Sesion implements ThreadListener {
         this.historicoController = new hospital.presentation.historico_recetas.Controller(historicoRecetasView, historicoRecetaModel);
         tabbedPane.addTab("Historico", historicoRecetasView.getHitoricoRecetasPanel());
 
+        addSharedTabs(tabbedPane);
     }
 
     public void addMedicoTabs(JTabbedPane tabbedPane) {
@@ -126,6 +153,8 @@ public class Sesion implements ThreadListener {
         hospital.presentation.historico_recetas.Model historicoRecetaModelMed = new hospital.presentation.historico_recetas.Model();
         hospital.presentation.historico_recetas.Controller historicoRecetasControllerMed = new hospital.presentation.historico_recetas.Controller(historicoRecetasViewMed, historicoRecetaModelMed);
         tabbedPane.addTab("Historico", historicoRecetasViewMed.getHitoricoRecetasPanel());
+
+        addSharedTabs(tabbedPane);
     }
 
     public void addFarmaceutaTabs(JTabbedPane tabbedPane) {
@@ -148,6 +177,8 @@ public class Sesion implements ThreadListener {
         hospital.presentation.historico_recetas.Model historicoRecetaModelMed = new hospital.presentation.historico_recetas.Model();
         hospital.presentation.historico_recetas.Controller historicoRecetasControllerMed = new hospital.presentation.historico_recetas.Controller(historicoRecetasViewMed, historicoRecetaModelMed);
         tabbedPane.addTab("Historico", historicoRecetasViewMed.getHitoricoRecetasPanel());
+
+        addSharedTabs(tabbedPane);
     }
 
     public void abrirVentanaPrincipal() {
@@ -175,6 +206,11 @@ public class Sesion implements ThreadListener {
         mainWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                try {
+                    Service.instance().logout();
+                } catch (Exception ex) {
+                    // Ignored
+                }
                 Service.instance().stop();
                 System.exit(0);
             }
@@ -184,6 +220,11 @@ public class Sesion implements ThreadListener {
     }
 
     public void cerrarSesion() {
+        try {
+            Service.instance().logout();
+        } catch (Exception e) {
+            // Ignored
+        }
         this.usuarioActual = null;
     }
 }

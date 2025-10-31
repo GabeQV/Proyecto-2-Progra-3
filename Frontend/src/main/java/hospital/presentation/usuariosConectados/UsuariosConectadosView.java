@@ -17,20 +17,22 @@ public class UsuariosConectadosView implements PropertyChangeListener {
     Controller controller;
     Model model;
 
-
-
+    public UsuariosConectadosView() {
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(Model.LIST)) {
-            // Cuando la lista en el modelo cambia, actualizamos la tabla
             int[] cols = {TableModel.ID};
             usuariosTable.setModel(new TableModel(cols, model.getList()));
-            this.revalidate();
+            usuariosTable.revalidate();
+            usuariosTable.repaint();
         }
     }
 
-    public JPanel getUsuariosPanel() {return UsuariosPanel;}
+    public JPanel getUsuariosPanel() {
+        return UsuariosPanel;
+    }
 
     public void setController(Controller controller) {
         this.controller = controller;

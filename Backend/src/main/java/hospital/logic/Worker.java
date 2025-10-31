@@ -76,9 +76,31 @@ public class Worker {
                             this.user = service.login(id, clave);
                             os.writeInt(Protocol.ERROR_NO_ERROR);
                             os.writeObject(user);
+                            srv.deliver_login(this.user);
                         } catch (Exception ex) {
                             os.writeInt(Protocol.ERROR_ERROR);
                             os.writeObject(ex.getMessage());
+                        }
+                        break;
+                    case Protocol.LOGOUT:
+                        try {
+                            if (this.user != null) {
+                                srv.deliver_logout(this.user);
+                                this.user = null;
+                            }
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                            os.writeObject(ex.getMessage());
+                        }
+                        break;
+                    case Protocol.GET_CONNECTED_USERS:
+                        try {
+                            List<Usuario> users = srv.getConnectedUsers();
+                            os.writeInt(Protocol.ERROR_NO_ERROR);
+                            os.writeObject(users);
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
                         }
                         break;
                     case Protocol.CHANGE_PASSWORD:
@@ -386,6 +408,28 @@ public class Worker {
                 aos.writeObject(message);
                 aos.flush();
             } catch (Exception e) {
+            }
+        }
+    }
+
+    public synchronized void deliver_login(Usuario user) {
+        if (as != null) {
+            try {
+                aos.writeInt(Protocol.DELIVER_LOGIN);
+                aos.writeObject(user);
+                aos.flush();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    public synchronized void deliver_logout(Usuario user) {
+        if (as != null) {
+            try {
+                aos.writeInt(Protocol.DELIVER_LOGOUT);
+                aos.writeObject(user);
+                aos.flush();
+            } catch (IOException e) {
             }
         }
     }
