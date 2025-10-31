@@ -56,5 +56,7 @@ public class Protocol {
     public static final int ASYNC = 11;
     public static final int DISCONNECT = 12;
     public static final int DELIVER_MESSAGE = 13;
+    public static final int DELIVER_LOGIN = 14;
+    public static final int DELIVER_LOGOUT = 15;
 
 }

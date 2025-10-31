@@ -13,10 +13,12 @@ public class Worker {
     ObjectInputStream is;
     Service service;
 
-    String sid; // Session Id
-    Socket as; // Asynchronous Socket
+    String sid;
+    Socket as;
     ObjectOutputStream aos;
     ObjectInputStream ais;
+
+    private Usuario user;
 
     public Worker(Server srv, Socket s, ObjectOutputStream os, ObjectInputStream is, String sid, Service service) {
         this.srv = srv;
@@ -25,7 +27,13 @@ public class Worker {
         this.is = is;
         this.service = service;
         this.sid = sid;
+        this.user = null;
     }
+
+    public Usuario getUser() {
+        return user;
+    }
+
     public void setAs(Socket as, ObjectOutputStream aos, ObjectInputStream ais) {
         this.as = as;
         this.aos = aos;
@@ -65,7 +73,7 @@ public class Worker {
                         try {
                             String id = (String) is.readObject();
                             String clave = (String) is.readObject();
-                            Usuario user = service.login(id, clave);
+                            this.user = service.login(id, clave);
                             os.writeInt(Protocol.ERROR_NO_ERROR);
                             os.writeObject(user);
                         } catch (Exception ex) {
