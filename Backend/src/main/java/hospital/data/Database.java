@@ -69,8 +69,8 @@ public class Database {
 
     public int executeUpdate(PreparedStatement statement) {
         try {
-            statement.executeUpdate();
             return statement.getUpdateCount();
+            statement.executeUpdate();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

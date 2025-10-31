@@ -8,6 +8,7 @@ import java.util.List;
 public class TableModel extends AbstractTableModel<Usuario> implements javax.swing.table.TableModel{
 
     public static final int ID = 0;
+    public static final int MENSAJES = 1;
 
     public TableModel(int[] cols, List<Usuario> rows) {
         super(cols, rows);
@@ -15,8 +16,9 @@ public class TableModel extends AbstractTableModel<Usuario> implements javax.swi
 
     @Override
     protected void initColNames() {
-        colNames = new String[1];
+        colNames = new String[2];
         colNames[ID] = "Id";
+        colNames[MENSAJES] = "Mensajes?";
     }
 
     @Override
@@ -24,6 +26,8 @@ public class TableModel extends AbstractTableModel<Usuario> implements javax.swi
         switch (cols[col]) {
             case ID:
                 return e.getId();
+                case MENSAJES:
+                    return "";
             default:
                 return "";
         }
