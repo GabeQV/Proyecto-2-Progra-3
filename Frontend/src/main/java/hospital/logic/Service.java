@@ -1,5 +1,6 @@
 package hospital.logic;
 
+import javax.swing.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -15,7 +16,6 @@ public class Service {
         return theInstance;
     }
 
-    // Streams para el canal Síncrono (petición-respuesta)
     private Socket s;
     private ObjectOutputStream os;
     private ObjectInputStream is;
@@ -24,12 +24,12 @@ public class Service {
     private ObjectOutputStream aos;
     private ObjectInputStream ais;
 
-    private String sid; // Session ID
+    private String sid;
     private ThreadListener listener;
 
     private Service() {
         try {
-
+            // Conexión Síncrona
             s = new Socket(Protocol.SERVER, Protocol.PORT);
             os = new ObjectOutputStream(s.getOutputStream());
             is = new ObjectInputStream(s.getInputStream());
@@ -37,18 +37,20 @@ public class Service {
             os.flush();
             sid = (String) is.readObject();
 
-
+            // Conexión Asíncrona
             as = new Socket(Protocol.SERVER, Protocol.PORT);
             aos = new ObjectOutputStream(as.getOutputStream());
             ais = new ObjectInputStream(as.getInputStream());
             aos.writeInt(Protocol.ASYNC);
             aos.writeObject(sid);
-            aos.flush();
+            aos.flush(); // Asegurarse de que el servidor reciba la cabecera y el SID.
 
+            // Iniciar la escucha DESPUÉS de que ambos streams estén establecidos y flusheados.
             startListening();
 
         } catch (Exception e) {
-            System.err.println("Error al conectar con el servidor: " + e.getMessage());
+            System.err.println("Error fatal al conectar con el servidor: " + e.getMessage());
+            e.printStackTrace();
             System.exit(-1);
         }
     }
@@ -61,52 +63,60 @@ public class Service {
         Thread t = new Thread(() -> {
             try {
                 while (true) {
-                    int method = ais.readInt();
+                    int method = ais.readInt(); // Espera bloqueante
+                    Object payload = ais.readObject(); // Leer el objeto que viene después
+
                     if (listener != null) {
-                        switch (method) {
-                            case Protocol.DELIVER_MESSAGE:
-                                String message = (String) ais.readObject();
-                                listener.deliver_message(message);
-                                break;
-                            case Protocol.DELIVER_LOGIN:
-                                Usuario loggedInUser = (Usuario) ais.readObject();
-                                listener.deliver_login(loggedInUser);
-                                break;
-                            case Protocol.DELIVER_LOGOUT:
-                                Usuario loggedOutUser = (Usuario) ais.readObject();
-                                listener.deliver_logout(loggedOutUser);
-                                break;
-                        }
+                        // Usar SwingUtilities para asegurar que la actualización de la UI ocurra en el hilo correcto
+                        SwingUtilities.invokeLater(() -> {
+                            try {
+                                switch (method) {
+                                    case Protocol.DELIVER_MESSAGE:
+                                        listener.deliver_message((String) payload);
+                                        break;
+                                    case Protocol.DELIVER_LOGIN:
+                                        listener.deliver_login((Usuario) payload);
+                                        break;
+                                    case Protocol.DELIVER_LOGOUT:
+                                        listener.deliver_logout((Usuario) payload);
+                                        break;
+                                }
+                            } catch (Exception e) {
+                                System.err.println("Error procesando mensaje del servidor: " + e.getMessage());
+                            }
+                        });
                     }
                 }
             } catch (Exception e) {
+                // Esto es normal si el servidor o el cliente cierran la conexión.
                 System.err.println("Se perdió la conexión asíncrona con el servidor.");
-                e.printStackTrace();
             }
         });
+        // Marcar como Daemon hace que este hilo no impida que la aplicación se cierre.
         t.setDaemon(true);
         t.start();
     }
 
-    // === MÉTODO CORREGIDO / REINTRODUCIDO ===
     public void stop() {
         try {
             os.writeInt(Protocol.DISCONNECT);
             os.flush();
+            // No es necesario cerrar los sockets aquí, el servidor lo hará.
         } catch (Exception e) {
-            // Ignorar errores aquí, ya que estamos cerrando la conexión de todos modos.
+            // Ignorar errores durante la desconexión.
         }
     }
 
-    // ----- MÉTODOS DE LÓGICA DE NEGOCIO (SIN CAMBIOS) -----
-
+    // ... RESTO DE MÉTODOS SIN CAMBIOS ...
+    // (login, logout, createMedicamento, etc.)
     // =============== AUTENTICACIÓN ===============
     public Usuario login(String id, String clave) throws Exception {
         os.writeInt(Protocol.LOGIN);
         os.writeObject(id);
         os.writeObject(clave);
         os.flush();
-        if (is.readInt() == Protocol.ERROR_NO_ERROR) {
+        int response = is.readInt();
+        if (response == Protocol.ERROR_NO_ERROR) {
             return (Usuario) is.readObject();
         } else {
             throw new Exception((String) is.readObject());
@@ -402,5 +412,4 @@ public class Service {
             throw new Exception((String) is.readObject());
         }
     }
-
 }

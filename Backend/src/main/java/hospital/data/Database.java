@@ -17,20 +17,22 @@ public class Database {
         return theInstance;
     }
 
-    public static final String PROPERTIES_FILE_NAME="database.properties";
-    Connection cnx;
+    // --- CAMBIOS CLAVE AQUÍ ---
+    // Ya no mantenemos una conexión única.
+    // private Connection cnx; // ELIMINAR ESTA LÍNEA
 
     public Database(){
-        cnx=this.getConnection();
+        // El constructor ahora está vacío.
     }
 
     public Connection getConnection(){
         try {
             Properties prop = new Properties();
-            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
+            // La ruta del archivo de propiedades es relativa al classpath
+            InputStream stream = getClass().getClassLoader().getResourceAsStream("database.properties");
 
             if (stream == null) {
-                throw new RuntimeException("No se pudo encontrar el archivo de propiedades en el classpath: " + PROPERTIES_FILE_NAME);
+                throw new RuntimeException("No se pudo encontrar el archivo de propiedades en el classpath: database.properties");
             }
 
             prop.load(stream);
@@ -45,17 +47,24 @@ public class Database {
                     database+"?user="+user+"&password="+password+"&serverTimezone=UTC";
 
             Class.forName(driver);
+            // Cada llamada devuelve una NUEVA conexión.
             return DriverManager.getConnection(URL_conexion);
         } catch (Exception e) {
-            System.err.println("Error al conectar con la base de datos: " + e.getMessage());
+            System.err.println("Error al obtener una conexión a la base de datos: " + e.getMessage());
             e.printStackTrace();
-            System.exit(-1);
+            // No salir de la aplicación, simplemente lanzar una excepción.
+            throw new RuntimeException("No se pudo conectar a la base de datos.", e);
         }
-        return null;
     }
 
+    // Los siguientes métodos ya no son necesarios porque los DAOs manejarán sus propias conexiones.
+    // Puedes eliminarlos o dejarlos si los usas en otro lugar, pero la práctica correcta
+    // es que cada DAO gestione su ciclo de vida de PreparedStatement.
+    /*
     public PreparedStatement prepareStatement(String statement) throws SQLException {
-        return cnx.prepareStatement(statement);
+        // Este método se vuelve problemático sin una conexión única.
+        // Se recomienda manejar los PreparedStatements en los DAOs.
+        throw new UnsupportedOperationException("Obtenga una conexión y prepare el statement en el DAO.");
     }
 
     public int executeUpdate(PreparedStatement statement) {
@@ -74,10 +83,5 @@ public class Database {
             throw new RuntimeException(ex);
         }
     }
-
-    public void close() throws Exception{
-        if (cnx!=null && !cnx.isClosed()){
-            cnx.close();
-        }
-    }
+    */
 }

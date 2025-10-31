@@ -1,6 +1,7 @@
 package hospital.data;
 
 import hospital.logic.Medicamento;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,75 +14,120 @@ public class MedicamentosDao {
     public MedicamentosDao(){
         db= Database.instance();
     }
+
     public void create(Medicamento e) throws Exception{
-        String sql="insert into Medicamentos (idMedicamento, nombreMedicamento, presentacionMedicamento)"+
-                "values(?,?,?)";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, e.getId());
-        stm.setString(2, e.getNombre());
-        stm.setString(3, e.getPresentacion());
-        int count=db.executeUpdate(stm);
-        if (count==0){
-            throw new Exception("Medicamento ya existe");
+        String sql="insert into Medicamentos (idMedicamento, nombreMedicamento, presentacionMedicamento) values(?,?,?)";
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, e.getId());
+            stm.setString(2, e.getNombre());
+            stm.setString(3, e.getPresentacion());
+            int count = stm.executeUpdate();
+            if (count==0){
+                throw new Exception("Medicamento ya existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al crear medicamento: " + ex.getMessage());
+        } finally {
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
     public Medicamento read(String id) throws Exception{
-        String sql="select * from Medicamentos m "+
-                "where m.idMedicamento=?";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, id);
-        ResultSet rs =  db.executeQuery(stm);
-        Medicamento m;
-        if (rs.next()) {
-            m = from(rs,"m");
-            return m;
-        }
-        else{
-            throw new Exception ("Medicamento no Existe");
+        String sql="select * from Medicamentos m where m.idMedicamento=?";
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return from(rs,"m");
+            } else {
+                throw new Exception ("Medicamento no Existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al leer medicamento: " + ex.getMessage());
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
     public void update(Medicamento p) throws Exception{
-        String sql="update medicamento set nombreMedicamento=?,presentacionMedicamento=?"+
-                "where idMedicamento=?";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, p.getNombre());
-        stm.setString(2, p.getPresentacion());
-        stm.setString(3, p.getId());
-        int count=db.executeUpdate(stm);
-        if (count==0){
-            throw new Exception("Medicamento ya existe");
-        }
-        if (count==0){
-            throw new Exception("Medicamento no existe");
+        String sql="update Medicamentos set nombreMedicamento=?, presentacionMedicamento=? where idMedicamento=?";
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, p.getNombre());
+            stm.setString(2, p.getPresentacion());
+            stm.setString(3, p.getId());
+            int count = stm.executeUpdate();
+            if (count==0){
+                throw new Exception("Medicamento no existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al actualizar medicamento: " + ex.getMessage());
+        } finally {
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
     public void delete(Medicamento m) throws Exception{
         String sql="delete from Medicamentos where idMedicamento=?";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, m.getId());
-        int count=db.executeUpdate(stm);
-        if (count==0){
-            throw new Exception("Medicamento no existe");
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, m.getId());
+            int count = stm.executeUpdate();
+            if (count==0){
+                throw new Exception("Medicamento no existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al eliminar medicamento: " + ex.getMessage());
+        } finally {
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
     public List<Medicamento> findByNombre(Medicamento filtro){
-        List<Medicamento> resultado = new ArrayList<Medicamento>();
+        List<Medicamento> resultado = new ArrayList<>();
+        String sql="select * from Medicamentos m where m.nombreMedicamento like ?";
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
         try {
-            String sql="select * from Medicamentos m "+
-                    "where m.nombreMedicamento like ?";
-            PreparedStatement stm = db.prepareStatement(sql);
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
             stm.setString(1, "%"+filtro.getNombre()+"%");
-            ResultSet rs =  db.executeQuery(stm);
-            Medicamento m;
+            rs = stm.executeQuery();
             while (rs.next()) {
-                m= from(rs,"m");
-                resultado.add(m);
+                resultado.add(from(rs,"m"));
             }
-        } catch (SQLException ex) {  }
+        } catch (SQLException ex) {
+            // Log error
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
+        }
         return resultado;
     }
 

@@ -2,6 +2,7 @@ package hospital.data;
 
 import hospital.logic.*;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,20 +21,31 @@ public class RecetasDao {
         String sql = "INSERT INTO recetas (idRecetas, indicaciones, cantidad, duracion, estado, fecha, " +
                 "medicamentos_idMedicamento, pacientes_idPaciente, usuarios_idusuarios) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, r.getId());
-        stm.setString(2, r.getIndicaciones());
-        stm.setString(3, r.getCantidad());
-        stm.setString(4, r.getDuracion());
-        stm.setString(5, r.getEstado());
-        stm.setObject(6, r.getFecha());
-        stm.setString(7, r.getMedicamento() != null ? r.getMedicamento().getId() : null);
-        stm.setString(8, r.getPaciente() != null ? r.getPaciente().getId() : null);
-        stm.setString(9, r.getUsuario() != null ? r.getUsuario().getId() : null);
 
-        int count = db.executeUpdate(stm);
-        if (count == 0) {
-            throw new Exception("No se pudo crear la receta");
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, r.getId());
+            stm.setString(2, r.getIndicaciones());
+            stm.setString(3, r.getCantidad());
+            stm.setString(4, r.getDuracion());
+            stm.setString(5, r.getEstado());
+            stm.setObject(6, r.getFecha());
+            stm.setString(7, r.getMedicamento() != null ? r.getMedicamento().getId() : null);
+            stm.setString(8, r.getPaciente() != null ? r.getPaciente().getId() : null);
+            stm.setString(9, r.getUsuario() != null ? r.getUsuario().getId() : null);
+
+            int count = stm.executeUpdate();
+            if (count == 0) {
+                throw new Exception("No se pudo crear la receta");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al crear receta: " + ex.getMessage());
+        } finally {
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
@@ -42,51 +54,84 @@ public class RecetasDao {
                 "r.idRecetas, r.indicaciones, r.cantidad, r.duracion, r.estado, r.fecha, " +
                 "med.idMedicamento AS med_id, med.nombreMedicamento AS med_nombre, med.presentacionMedicamento AS med_presentacion, " +
                 "pac.idPaciente AS pac_id, pac.nombrePaciente AS pac_nombre, " +
-                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre " +
+                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre, usr.tipoUsuario as usr_tipo " +
                 "FROM recetas r " +
                 "JOIN medicamentos med ON r.medicamentos_idMedicamento = med.idMedicamento " +
                 "JOIN pacientes pac ON r.pacientes_idPaciente = pac.idPaciente " +
                 "LEFT JOIN usuarios usr ON r.usuarios_idusuarios = usr.idUsuario " +
                 "WHERE r.idRecetas = ?";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, id);
-        ResultSet rs = db.executeQuery(stm);
-        if (rs.next()) {
-            return from(rs);
-        } else {
-            throw new Exception("Receta no existe");
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return from(rs);
+            } else {
+                throw new Exception("Receta no existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al leer receta: " + ex.getMessage());
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
-    // ---------------- UPDATE ----------------
     public void update(Receta r) throws Exception {
         String sql = "UPDATE recetas SET indicaciones=?, cantidad=?, duracion=?, estado=?, fecha=?, " +
                 "medicamentos_idMedicamento=?, pacientes_idPaciente=?, usuarios_idusuarios=? " +
                 "WHERE idRecetas=?";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, r.getIndicaciones());
-        stm.setString(2, r.getCantidad());
-        stm.setString(3, r.getDuracion());
-        stm.setString(4, r.getEstado());
-        stm.setObject(5, r.getFecha());
-        stm.setString(6, r.getMedicamento() != null ? r.getMedicamento().getId() : null);
-        stm.setString(7, r.getPaciente() != null ? r.getPaciente().getId() : null);
-        stm.setString(8, r.getUsuario() != null ? r.getUsuario().getId() : null);
-        stm.setString(9, r.getId());
 
-        int count = db.executeUpdate(stm);
-        if (count == 0) {
-            throw new Exception("Receta no existe");
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, r.getIndicaciones());
+            stm.setString(2, r.getCantidad());
+            stm.setString(3, r.getDuracion());
+            stm.setString(4, r.getEstado());
+            stm.setObject(5, r.getFecha());
+            stm.setString(6, r.getMedicamento() != null ? r.getMedicamento().getId() : null);
+            stm.setString(7, r.getPaciente() != null ? r.getPaciente().getId() : null);
+            stm.setString(8, r.getUsuario() != null ? r.getUsuario().getId() : null);
+            stm.setString(9, r.getId());
+
+            int count = stm.executeUpdate();
+            if (count == 0) {
+                throw new Exception("Receta no existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al actualizar receta: " + ex.getMessage());
+        } finally {
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
     public void delete(Receta r) throws Exception {
         String sql = "DELETE FROM recetas WHERE idRecetas = ?";
-        PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, r.getId());
-        int count = db.executeUpdate(stm);
-        if (count == 0) {
-            throw new Exception("Receta no existe");
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        try {
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            stm.setString(1, r.getId());
+            int count = stm.executeUpdate();
+            if (count == 0) {
+                throw new Exception("Receta no existe");
+            }
+        } catch (SQLException ex) {
+            throw new Exception("Error al eliminar receta: " + ex.getMessage());
+        } finally {
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
         }
     }
 
@@ -96,23 +141,31 @@ public class RecetasDao {
                 "r.idRecetas, r.indicaciones, r.cantidad, r.duracion, r.estado, r.fecha, " +
                 "med.idMedicamento AS med_id, med.nombreMedicamento AS med_nombre, med.presentacionMedicamento AS med_presentacion, " +
                 "pac.idPaciente AS pac_id, pac.nombrePaciente AS pac_nombre, " +
-                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre " +
+                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre, usr.tipoUsuario as usr_tipo " +
                 "FROM recetas r " +
                 "JOIN medicamentos med ON r.medicamentos_idMedicamento = med.idMedicamento " +
                 "JOIN pacientes pac ON r.pacientes_idPaciente = pac.idPaciente " +
                 "LEFT JOIN usuarios usr ON r.usuarios_idusuarios = usr.idUsuario " +
                 "WHERE r.pacientes_idPaciente = ?";
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement stm = db.prepareStatement(sql);
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
             stm.setString(1, idPaciente);
-            ResultSet rs = db.executeQuery(stm);
+            rs = stm.executeQuery();
             while (rs.next()) {
-                Receta receta = from(rs);
-                if (receta != null) {
-                    resultado.add(receta);
-                }
+                resultado.add(from(rs));
             }
-        } catch (SQLException ex) { ex.printStackTrace(); }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
+        }
         return resultado;
     }
 
@@ -122,21 +175,29 @@ public class RecetasDao {
                 "r.idRecetas, r.indicaciones, r.cantidad, r.duracion, r.estado, r.fecha, " +
                 "med.idMedicamento AS med_id, med.nombreMedicamento AS med_nombre, med.presentacionMedicamento AS med_presentacion, " +
                 "pac.idPaciente AS pac_id, pac.nombrePaciente AS pac_nombre, " +
-                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre " +
+                "usr.idUsuario AS usr_id, usr.nombreUsuario AS usr_nombre, usr.tipoUsuario as usr_tipo " +
                 "FROM recetas r " +
                 "JOIN medicamentos med ON r.medicamentos_idMedicamento = med.idMedicamento " +
                 "JOIN pacientes pac ON r.pacientes_idPaciente = pac.idPaciente " +
                 "LEFT JOIN usuarios usr ON r.usuarios_idusuarios = usr.idUsuario";
+
+        Connection cnx = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement stm = db.prepareStatement(sql);
-            ResultSet rs = db.executeQuery(stm);
+            cnx = db.getConnection();
+            stm = cnx.prepareStatement(sql);
+            rs = stm.executeQuery();
             while (rs.next()) {
-                Receta receta = from(rs);
-                if (receta != null) {
-                    resultado.add(receta);
-                }
+                resultado.add(from(rs));
             }
-        } catch (SQLException ex) { ex.printStackTrace(); }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+            if (stm != null) try { stm.close(); } catch (SQLException ignored) {}
+            if (cnx != null) try { cnx.close(); } catch (SQLException ignored) {}
+        }
         return resultado;
     }
 
@@ -161,10 +222,17 @@ public class RecetasDao {
             p.setNombre(rs.getString("pac_nombre"));
             r.setPaciente(p);
 
-
             String userId = rs.getString("usr_id");
             if (userId != null) {
-                Medico u = new Medico();
+                String userType = rs.getString("usr_tipo");
+                Usuario u;
+                if ("MEDICO".equals(userType)) {
+                    u = new Medico();
+                } else if ("FARMACEUTA".equals(userType)) {
+                    u = new Farmaceuta();
+                } else {
+                    u = new Admin(); // o un tipo por defecto
+                }
                 u.setId(userId);
                 u.setNombre(rs.getString("usr_nombre"));
                 r.setUsuario(u);
