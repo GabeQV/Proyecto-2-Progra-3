@@ -25,33 +25,46 @@ public class Server {
         Service service = Service.instance();
 
         boolean continuar = true;
-        Socket s;
-        Worker worker;
-        String sid;
         while (continuar) {
             try {
-                s = ss.accept();
+                Socket s = ss.accept();
                 System.out.println("Conexion Establecida...");
                 ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
                 ObjectInputStream is = new ObjectInputStream(s.getInputStream());
                 int type= is.readInt();
+                String sid;
                 switch (type) {
                     case Protocol.SYNC:
-                        sid=s.getRemoteSocketAddress().toString();
-                        System.out.println("SYNCH: "+sid);
-                        worker = new Worker(this, s, os, is, sid, service);
-                        workers.add(worker);
-                        System.out.println("Quedan: " + workers.size());
-                        worker.start();
+                        sid = s.getRemoteSocketAddress().toString();
+                        System.out.println("SYNC: "+sid);
+
+                        Worker w = find(sid);
+                        if (w == null) {
+                            w = new Worker(this, sid, service);
+                            workers.add(w);
+                        }
+                        w.setSync(s, os, is);
+
+                        if (w.isReady()) w.start();
+
                         os.writeObject(sid);
+                        os.flush();
                         break;
+
                     case Protocol.ASYNC:
                         sid=(String)is.readObject();
-                        System.out.println("ASYNCH: "+sid);
-                        join(s,os,is,sid);
+                        System.out.println("ASYNC: "+sid);
+
+                        Worker w_async = find(sid);
+                        if (w_async == null) {
+                            w_async = new Worker(this, sid, service);
+                            workers.add(w_async);
+                        }
+                        w_async.setAsync(s, os, is);
+
+                        if (w_async.isReady()) w_async.start();
                         break;
                 }
-                os.flush();
             }
             catch (IOException | ClassNotFoundException ex) {
                 System.out.println(ex);
@@ -59,19 +72,20 @@ public class Server {
         }
     }
 
+    private Worker find(String sid) {
+        for (Worker w : workers) {
+            if (w.sid.equals(sid)) {
+                return w;
+            }
+        }
+        return null;
+    }
+
     public void remove(Worker w) {
         workers.remove(w);
         System.out.println("Quedan: " +workers.size());
     }
 
-    public void join(Socket as,ObjectOutputStream aos, ObjectInputStream ais, String sid){
-        for(Worker w:workers){
-            if(w.sid.equals(sid)){
-                w.setAs(as,aos,ais);
-                break;
-            }
-        }
-    }
     public void deliver_message(Worker from, String message){
         for(Worker w:workers){
             w.deliver_message(message);

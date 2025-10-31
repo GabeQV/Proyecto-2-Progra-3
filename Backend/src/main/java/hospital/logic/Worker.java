@@ -8,36 +8,44 @@ import java.util.List;
 
 public class Worker {
     Server srv;
+    // SYNC
     Socket s;
     ObjectOutputStream os;
     ObjectInputStream is;
-    Service service;
-
-    String sid;
+    // ASYNC
     Socket as;
     ObjectOutputStream aos;
     ObjectInputStream ais;
 
+    Service service;
+    String sid;
     private Usuario user;
 
-    public Worker(Server srv, Socket s, ObjectOutputStream os, ObjectInputStream is, String sid, Service service) {
+    public Worker(Server srv, String sid, Service service) {
         this.srv = srv;
+        this.sid = sid;
+        this.service = service;
+        this.user = null;
+    }
+
+    public void setSync(Socket s, ObjectOutputStream os, ObjectInputStream is) {
         this.s = s;
         this.os = os;
         this.is = is;
-        this.service = service;
-        this.sid = sid;
-        this.user = null;
+    }
+
+    public void setAsync(Socket as, ObjectOutputStream aos, ObjectInputStream ais) {
+        this.as = as;
+        this.aos = aos;
+        this.ais = ais;
+    }
+
+    public boolean isReady() {
+        return s != null && as != null;
     }
 
     public Usuario getUser() {
         return user;
-    }
-
-    public void setAs(Socket as, ObjectOutputStream aos, ObjectInputStream ais) {
-        this.as = as;
-        this.aos = aos;
-        this.ais = ais;
     }
 
     boolean continuar;
@@ -394,13 +402,10 @@ public class Worker {
                 }
                 os.flush();
             } catch (IOException e) {
-                System.err.println("Worker " + sid + ": Conexión síncrona perdida. Esperando DISCONNECT...");
-                // No detenemos el worker, solo el canal síncrono ha muerto.
-                // El worker se detendrá cuando el cliente envíe DISCONNECT o el servidor se apague.
-                try {
-                    // Dormir un poco para no consumir CPU en un bucle apretado si la conexión se pierde.
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {}
+                if (user != null) srv.deliver_logout(this.user);
+                stop();
+                srv.remove(this);
+                System.err.println("Worker " + sid + ": Conexión perdida. Worker detenido.");
             } catch (Exception e) {
                 System.err.println("Worker " + sid + " error inesperado: " + e.getMessage());
                 e.printStackTrace();
@@ -409,7 +414,7 @@ public class Worker {
     }
 
     public synchronized void deliver_message(String message) {
-        if (as != null) {
+        if (aos != null) {
             try {
                 aos.writeInt(Protocol.DELIVER_MESSAGE);
                 aos.writeObject(message);
@@ -420,7 +425,7 @@ public class Worker {
     }
 
     public synchronized void deliver_login(Usuario user) {
-        if (as != null) {
+        if (aos != null) {
             try {
                 aos.writeInt(Protocol.DELIVER_LOGIN);
                 aos.writeObject(user);
@@ -431,7 +436,7 @@ public class Worker {
     }
 
     public synchronized void deliver_logout(Usuario user) {
-        if (as != null) {
+        if (aos != null) {
             try {
                 aos.writeInt(Protocol.DELIVER_LOGOUT);
                 aos.writeObject(user);
@@ -440,5 +445,4 @@ public class Worker {
             }
         }
     }
-
 }
