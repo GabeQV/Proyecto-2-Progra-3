@@ -37,22 +37,44 @@ public class LoginView  {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String id = idField.getText();
-                String clave = claveField.getText();
-                try {
-                    Usuario user = Service.instance().login(id, clave);
-                    Sesion.instance().setUsuarioActual(user);
-                    JOptionPane.showMessageDialog(LoginPanel, "Bienvenido " + user.getNombre(), "Login exitoso", JOptionPane.INFORMATION_MESSAGE);
+                final String id = idField.getText();
+                final String clave = claveField.getText();
 
-                    JFrame window = (JFrame) SwingUtilities.getWindowAncestor(LoginPanel);
-                    window.dispose();
 
-                    Sesion.instance().abrirVentanaPrincipal();
+                loginButton.setEnabled(false);
+                loginButton.setText("Conectando...");
 
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(LoginPanel, ex.getMessage(), "Error de login", JOptionPane.ERROR_MESSAGE);
-                }
 
+                SwingWorker<Usuario, Void> worker = new SwingWorker<Usuario, Void>() {
+                    @Override
+                    protected Usuario doInBackground() throws Exception {
+
+                        return Service.instance().login(id, clave);
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+
+                            Usuario user = get();
+                            Sesion.instance().setUsuarioActual(user);
+                            JOptionPane.showMessageDialog(LoginPanel, "Bienvenido " + user.getNombre(), "Login exitoso", JOptionPane.INFORMATION_MESSAGE);
+
+                            JFrame window = (JFrame) SwingUtilities.getWindowAncestor(LoginPanel);
+                            window.dispose();
+
+                            Sesion.instance().abrirVentanaPrincipal();
+
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(LoginPanel, ex.getCause().getMessage(), "Error de login", JOptionPane.ERROR_MESSAGE);
+                        } finally {
+                            loginButton.setEnabled(true);
+                            loginButton.setText("Login");
+                        }
+                    }
+                };
+
+                worker.execute();
             }
         });
     }
