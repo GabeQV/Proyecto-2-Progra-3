@@ -6,8 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Service {
+    private final Map<String, ThreadListener> listenersPorUsuario = new ConcurrentHashMap<>();
+
     private static Service theInstance;
     public static Service instance() {
         if (theInstance == null) {
@@ -106,9 +110,6 @@ public class Service {
             // Ignorar errores durante la desconexión.
         }
     }
-
-    // ... RESTO DE MÉTODOS SIN CAMBIOS ...
-    // (login, logout, createMedicamento, etc.)
     // =============== AUTENTICACIÓN ===============
     public Usuario login(String id, String clave) throws Exception {
         os.writeInt(Protocol.LOGIN);
@@ -142,6 +143,40 @@ public class Service {
             throw new Exception((String) is.readObject());
         }
     }
+
+    // =============== REGISTRO LOCAL PARA DMs ===============
+
+    public void registrarUsuarioConectado(String usuarioId, ThreadListener l) {
+        if (usuarioId == null || usuarioId.isEmpty() || l == null) return;
+        listenersPorUsuario.put(usuarioId, l);
+    }
+
+    public void desregistrarUsuario(String usuarioId) {
+        if (usuarioId == null || usuarioId.isEmpty()) return;
+        listenersPorUsuario.remove(usuarioId);
+    }
+
+    /**
+     * Envía un DM localmente (cliente a cliente en la misma ejecución).
+     * Entrega al receptor por medio de su ThreadListener: DM|<remitente>|<texto>
+     */
+    public void enviarMensajeDirecto(String destinatarioId, String texto) throws Exception {
+        if (destinatarioId == null || destinatarioId.isEmpty()) {
+            throw new IllegalArgumentException("Debe indicar un destinatario.");
+        }
+        Usuario emisor = Sesion.instance().getUsuarioActual();
+        if (emisor == null) {
+            throw new IllegalStateException("No hay usuario autenticado.");
+        }
+        ThreadListener receptor = listenersPorUsuario.get(destinatarioId);
+        if (receptor == null) {
+            throw new IllegalStateException("El usuario " + destinatarioId + " no está conectado.");
+        }
+        String limpio = (texto == null ? "" : texto.replace("\n", " "));
+        receptor.deliver_message("DM|" + emisor.getId() + "|" + limpio);
+    }
+
+
 
     // =============== USUARIOS CONECTADOS ===============
     public List<Usuario> getConnectedUsers() throws Exception {

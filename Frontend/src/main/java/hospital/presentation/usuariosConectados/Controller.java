@@ -35,4 +35,25 @@ public class Controller {
     public void userLoggedOut(Usuario user) {
         model.removeUser(user);
     }
+
+    /** Envía un mensaje al usuario destino a través del Service. */
+    public void enviarMensajeA(String destinatarioId, String texto) throws Exception {
+        if (destinatarioId == null || destinatarioId.isEmpty()) {
+            throw new IllegalArgumentException("Debe indicar un destinatario.");
+        }
+        hospital.logic.Service.instance().enviarMensajeDirecto(destinatarioId, texto == null ? "" : texto);
+    }
+
+    /** Llamado cuando llega un mensaje del backend. Lo almacena y refresca la vista. */
+    public void recibirMensajeDe(String remitenteId, String texto) {
+        model.encolarMensaje(remitenteId, texto);
+        model.refrescarLista(); // hará que la vista vuelva a construir el TableModel
+    }
+
+    /** Devuelve el próximo mensaje del remitente y refresca la vista para actualizar el indicador. */
+    public String obtenerSiguienteMensajeDe(String remitenteId) {
+        String msg = model.extraerMensaje(remitenteId);
+        model.refrescarLista();
+        return msg;
+    }
 }
