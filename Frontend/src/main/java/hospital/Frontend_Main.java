@@ -1,9 +1,11 @@
 package hospital;
 
 import hospital.logic.Service;
+import hospital.logic.Sesion;
 import hospital.presentation.login.LoginView;
 import javax.swing.*;
 import java.awt.Color;
+import java.util.concurrent.CountDownLatch;
 
 public class Frontend_Main {
     public static final Color BACKGROUND_ERROR = new Color(255, 200, 200);
@@ -13,6 +15,9 @@ public class Frontend_Main {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         }
         catch (Exception ex) {};
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        Sesion.instance().setLatch(latch);
 
         Service.instance();
 
@@ -25,5 +30,12 @@ public class Frontend_Main {
             window.setLocationRelativeTo(null);
             window.setVisible(true);
         });
+
+        try {
+            latch.await();
+            System.out.println("Aplicación terminando...");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

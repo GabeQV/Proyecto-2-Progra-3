@@ -6,10 +6,12 @@ import hospital.presentation.despacho.DespachoView;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.concurrent.CountDownLatch;
 
 public class Sesion implements ThreadListener {
     private static Sesion theInstance;
     private Usuario usuarioActual;
+    private CountDownLatch latch; // Añadir el latch
 
     private hospital.presentation.catalogo.Controller catalogoController;
     private hospital.presentation.despacho.Controller despachoController;
@@ -26,6 +28,10 @@ public class Sesion implements ThreadListener {
     }
 
     private Sesion() {}
+
+    public void setLatch(CountDownLatch latch) {
+        this.latch = latch;
+    }
 
     public void setUsuarioActual(Usuario user) {
         this.usuarioActual = user;
@@ -209,9 +215,11 @@ public class Sesion implements ThreadListener {
                 try {
                     Service.instance().logout();
                 } catch (Exception ex) {
-                    // Ignored
                 }
                 Service.instance().stop();
+                if (latch != null) {
+                    latch.countDown();
+                }
                 System.exit(0);
             }
         });
@@ -223,7 +231,6 @@ public class Sesion implements ThreadListener {
         try {
             Service.instance().logout();
         } catch (Exception e) {
-            // Ignored
         }
         this.usuarioActual = null;
     }
