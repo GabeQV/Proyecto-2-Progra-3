@@ -64,7 +64,7 @@ public class UsuariosConectadosView implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(Model.LIST)) {
             int[] cols = {TableModel.ID, TableModel.MENSAJES};
-            usuariosTable.setModel(new TableModel(cols, model.getList()));
+            usuariosTable.setModel(new TableModel(cols, model.getList(),model));
             usuariosTable.revalidate();
             usuariosTable.repaint();
         }

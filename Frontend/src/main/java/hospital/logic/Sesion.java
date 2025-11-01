@@ -44,9 +44,7 @@ public class Sesion implements ThreadListener {
     @Override
     public void deliver_message(String message) {
         SwingUtilities.invokeLater(() -> {
-            System.out.println("NOTIFICACIÓN RECIBIDA: " + message);
             try {
-                // Manejo de mensajes directos: DM|<fromId>|<texto>
                 if (message != null && message.startsWith("DM|")) {
                     String[] parts = message.split("\\|", 3);
                     String fromId = parts.length > 1 ? parts[1] : "";
@@ -54,7 +52,7 @@ public class Sesion implements ThreadListener {
                     if (usuariosConectadosController != null && fromId != null && !fromId.isEmpty()) {
                         usuariosConectadosController.recibirMensajeDe(fromId, text);
                     }
-                    return; // ya manejado
+                    return;
                 }
 
                 switch(message) {
@@ -89,6 +87,7 @@ public class Sesion implements ThreadListener {
             }
         });
     }
+
 
     @Override
     public void deliver_logout(Usuario user) {

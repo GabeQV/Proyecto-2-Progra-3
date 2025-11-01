@@ -96,6 +96,7 @@ public class Worker {
                             os.writeInt(Protocol.ERROR_ERROR);
                             os.writeObject(ex.getMessage());
                         }
+                        break;
                     // ------------ LOGIN ------------
                     case Protocol.LOGIN:
                         try {

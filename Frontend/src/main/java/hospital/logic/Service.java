@@ -144,39 +144,21 @@ public class Service {
         }
     }
 
-    // =============== REGISTRO LOCAL PARA DMs ===============
-
-    public void registrarUsuarioConectado(String usuarioId, ThreadListener l) {
-        if (usuarioId == null || usuarioId.isEmpty() || l == null) return;
-        listenersPorUsuario.put(usuarioId, l);
-    }
-
-    public void desregistrarUsuario(String usuarioId) {
-        if (usuarioId == null || usuarioId.isEmpty()) return;
-        listenersPorUsuario.remove(usuarioId);
-    }
-
-    /**
-     * Envía un DM localmente (cliente a cliente en la misma ejecución).
-     * Entrega al receptor por medio de su ThreadListener: DM|<remitente>|<texto>
-     */
+    // =============== MENSAJES ==========================
     public void enviarMensajeDirecto(String destinatarioId, String texto) throws Exception {
         if (destinatarioId == null || destinatarioId.isEmpty()) {
             throw new IllegalArgumentException("Debe indicar un destinatario.");
         }
-        Usuario emisor = Sesion.instance().getUsuarioActual();
-        if (emisor == null) {
-            throw new IllegalStateException("No hay usuario autenticado.");
-        }
-        ThreadListener receptor = listenersPorUsuario.get(destinatarioId);
-        if (receptor == null) {
-            throw new IllegalStateException("El usuario " + destinatarioId + " no está conectado.");
-        }
         String limpio = (texto == null ? "" : texto.replace("\n", " "));
-        receptor.deliver_message("DM|" + emisor.getId() + "|" + limpio);
+        os.writeInt(Protocol.DM_ENVIAR);
+        os.writeObject(destinatarioId);
+        os.writeObject(limpio);
+        os.flush();
+        int resp = is.readInt();
+        if (resp != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
     }
-
-
 
     // =============== USUARIOS CONECTADOS ===============
     public List<Usuario> getConnectedUsers() throws Exception {

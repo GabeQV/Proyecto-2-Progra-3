@@ -11,7 +11,7 @@ public class TableModel extends AbstractTableModel<Usuario> implements javax.swi
     public static final int MENSAJES = 1;
     private final Model model;
 
-    public TableModel(int[] cols, List<Usuario> rows) {
+    public TableModel(int[] cols, List<Usuario> rows, Model model) {
         super(cols, rows);
         this.model = model;
     }
