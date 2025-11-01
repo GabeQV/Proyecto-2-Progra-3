@@ -6,8 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Service {
+    private final Map<String, ThreadListener> listenersPorUsuario = new ConcurrentHashMap<>();
+
     private static Service theInstance;
     public static Service instance() {
         if (theInstance == null) {
@@ -106,9 +110,6 @@ public class Service {
             // Ignorar errores durante la desconexión.
         }
     }
-
-    // ... RESTO DE MÉTODOS SIN CAMBIOS ...
-    // (login, logout, createMedicamento, etc.)
     // =============== AUTENTICACIÓN ===============
     public Usuario login(String id, String clave) throws Exception {
         os.writeInt(Protocol.LOGIN);
@@ -139,6 +140,22 @@ public class Service {
         os.writeObject(confirmarClave);
         os.flush();
         if (is.readInt() != Protocol.ERROR_NO_ERROR) {
+            throw new Exception((String) is.readObject());
+        }
+    }
+
+    // =============== MENSAJES ==========================
+    public void enviarMensajeDirecto(String destinatarioId, String texto) throws Exception {
+        if (destinatarioId == null || destinatarioId.isEmpty()) {
+            throw new IllegalArgumentException("Debe indicar un destinatario.");
+        }
+        String limpio = (texto == null ? "" : texto.replace("\n", " "));
+        os.writeInt(Protocol.DM_ENVIAR);
+        os.writeObject(destinatarioId);
+        os.writeObject(limpio);
+        os.flush();
+        int resp = is.readInt();
+        if (resp != Protocol.ERROR_NO_ERROR) {
             throw new Exception((String) is.readObject());
         }
     }

@@ -76,6 +76,27 @@ public class Worker {
                 System.out.println("Operacion: " + method + " para " + sid);
                 switch (method) {
                     // ... (TODOS LOS CASE VAN AQUÍ, SIN CAMBIOS)
+                    case Protocol.DM_ENVIAR:
+                        try {
+                            String toId = (String) is.readObject();
+                            String text = (String) is.readObject();
+                            if (this.user == null) {
+                                os.writeInt(Protocol.ERROR_ERROR);
+                                os.writeObject("No autenticado.");
+                                break;
+                            }
+                            boolean entregado = srv.deliver_dm(this.user, toId, text);
+                            if (entregado) {
+                                os.writeInt(Protocol.ERROR_NO_ERROR);
+                            } else {
+                                os.writeInt(Protocol.ERROR_ERROR);
+                                os.writeObject("El usuario " + toId + " no está conectado.");
+                            }
+                        } catch (Exception ex) {
+                            os.writeInt(Protocol.ERROR_ERROR);
+                            os.writeObject(ex.getMessage());
+                        }
+                        break;
                     // ------------ LOGIN ------------
                     case Protocol.LOGIN:
                         try {

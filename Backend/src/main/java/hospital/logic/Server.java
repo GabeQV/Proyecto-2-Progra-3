@@ -14,13 +14,17 @@ import java.util.stream.Collectors;
 public class Server {
     ServerSocket ss;
     List<Worker> workers;
+
     public Server() {
         try {
             ss = new ServerSocket(Protocol.PORT);
             workers = Collections.synchronizedList(new ArrayList<Worker>());
             System.out.println("Servidor iniciado...");
-        } catch (IOException ex) { System.out.println(ex);}
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     }
+
     public void run() {
 
         Service service = Service.instance();
@@ -32,7 +36,7 @@ public class Server {
                 System.out.println("Conexion Establecida...");
                 ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
                 ObjectInputStream is = new ObjectInputStream(s.getInputStream());
-                int type= is.readInt();
+                int type = is.readInt();
                 String sid;
                 switch (type) {
                     case Protocol.SYNC:
@@ -55,8 +59,8 @@ public class Server {
                         break;
 
                     case Protocol.ASYNC:
-                        sid=(String)is.readObject();
-                        System.out.println("ASYNC: "+sid);
+                        sid = (String) is.readObject();
+                        System.out.println("ASYNC: " + sid);
 
                         Worker w_async = find(sid);
                         if (w_async == null) {
@@ -68,8 +72,7 @@ public class Server {
                         if (w_async.isReady()) w_async.start();
                         break;
                 }
-            }
-            catch (IOException | ClassNotFoundException ex) {
+            } catch (IOException | ClassNotFoundException ex) {
                 System.out.println(ex);
             }
         }
@@ -86,11 +89,11 @@ public class Server {
 
     public void remove(Worker w) {
         workers.remove(w);
-        System.out.println("Quedan: " +workers.size());
+        System.out.println("Quedan: " + workers.size());
     }
 
-    public void deliver_message(Worker from, String message){
-        for(Worker w:workers){
+    public void deliver_message(Worker from, String message) {
+        for (Worker w : workers) {
             w.deliver_message(message);
         }
     }
@@ -114,4 +117,16 @@ public class Server {
                 .collect(Collectors.toList());
     }
 
-}
+    public boolean deliver_dm(Usuario from, String toUserId, String text) {
+        if (toUserId == null) return false;
+        for (Worker w : workers) {
+            Usuario u = w.getUser();
+            if (u != null && toUserId.equals(u.getId())) {
+                String payload = "DM|" + (from != null ? from.getId() : "") + "|" + (text == null ? "" : text);
+                w.deliver_message(payload);
+                return true;
+            }
+        }
+        return false;
+    }
+};

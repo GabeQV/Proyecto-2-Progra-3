@@ -4,7 +4,7 @@ import hospital.logic.ThreadListener;
 import hospital.presentation.despacho.DespachoView;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.CountDownLatch;
@@ -29,18 +29,33 @@ public class Sesion implements ThreadListener {
 
     private Sesion() {}
 
-    public void setLatch(CountDownLatch latch) { this.latch = latch; }
+    public void setLatch(CountDownLatch latch) {
+        this.latch = latch;
+    }
 
-    public void setUsuarioActual(Usuario user) { this.usuarioActual = user; }
+    public void setUsuarioActual(Usuario user) {
+        this.usuarioActual = user;
+    }
 
-    public Usuario getUsuarioActual() { return usuarioActual; }
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
 
     @Override
     public void deliver_message(String message) {
         SwingUtilities.invokeLater(() -> {
-            System.out.println("NOTIFICACIÓN RECIBIDA: " + message);
             try {
-                switch (message) {
+                if (message != null && message.startsWith("DM|")) {
+                    String[] parts = message.split("\\|", 3);
+                    String fromId = parts.length > 1 ? parts[1] : "";
+                    String text   = parts.length > 2 ? parts[2] : "";
+                    if (usuariosConectadosController != null && fromId != null && !fromId.isEmpty()) {
+                        usuariosConectadosController.recibirMensajeDe(fromId, text);
+                    }
+                    return;
+                }
+
+                switch(message) {
                     case "UPDATE_MEDICAMENTOS":
                         if (catalogoController != null) catalogoController.refreshList();
                         break;
@@ -73,6 +88,7 @@ public class Sesion implements ThreadListener {
         });
     }
 
+
     @Override
     public void deliver_logout(Usuario user) {
         SwingUtilities.invokeLater(() -> {
@@ -82,8 +98,8 @@ public class Sesion implements ThreadListener {
         });
     }
 
-    // Construye el panel lateral de Usuarios (SIEMPRE visible)
-    private JComponent buildUsuariosSidePanel() {
+    // Construye el panel lateral de Usuarios (siempre visible)
+    private JComponent construirPanelUsuarios() {
         hospital.presentation.usuariosConectados.UsuariosConectadosView usuariosView =
                 new hospital.presentation.usuariosConectados.UsuariosConectadosView();
         hospital.presentation.usuariosConectados.Model usuariosModel =
@@ -92,36 +108,36 @@ public class Sesion implements ThreadListener {
                 new hospital.presentation.usuariosConectados.Controller(usuariosView, usuariosModel);
 
         JComponent panel = usuariosView.getUsuariosPanel();
-        panel.setPreferredSize(new Dimension(280, 0)); // ancho fijo, alto se estira
+        panel.setPreferredSize(new Dimension(260, 0)); // ancho fijo, alto se estira
         return panel;
     }
 
     private void addAdminTabs(JTabbedPane tabbedPane) {
-        // Medicos
+        // MVC de Medicos
         hospital.presentation.medicos.MedicosView medicosView = new hospital.presentation.medicos.MedicosView();
         hospital.presentation.medicos.Model medicosModel = new hospital.presentation.medicos.Model();
         this.medicosController = new hospital.presentation.medicos.Controller(medicosView, medicosModel);
         tabbedPane.addTab("Medicos", medicosView.getMedicosPanel());
 
-        // Farmaceutas
+        // MVC de Farmaceutas
         hospital.presentation.farmaceutas.FarmaceutasView farmaceutasView = new hospital.presentation.farmaceutas.FarmaceutasView();
         hospital.presentation.farmaceutas.Model farmaceutasModel = new hospital.presentation.farmaceutas.Model();
         this.farmaceutasController = new hospital.presentation.farmaceutas.Controller(farmaceutasView, farmaceutasModel);
         tabbedPane.addTab("Farmaceutas", farmaceutasView.getFarmaceutasPanel());
 
-        // Pacientes
+        // MVC de Pacientes
         hospital.presentation.pacientes.PacientesView pacientesView = new hospital.presentation.pacientes.PacientesView();
         hospital.presentation.pacientes.Model pacientesModel = new hospital.presentation.pacientes.Model();
         this.pacientesController = new hospital.presentation.pacientes.Controller(pacientesView, pacientesModel);
         tabbedPane.addTab("Pacientes", pacientesView.getPacientesPanel());
 
-        // Medicamentos (Catálogo)
+        // MVC de catalogo
         hospital.presentation.catalogo.CatologoView catologoView = new hospital.presentation.catalogo.CatologoView();
         hospital.presentation.catalogo.Model catologoModel = new hospital.presentation.catalogo.Model();
         this.catalogoController = new hospital.presentation.catalogo.Controller(catologoView, catologoModel);
         tabbedPane.addTab("Medicamentos", catologoView.getCatalogoPanel());
 
-        // Dashboard
+        // MVC de dashboard
         hospital.presentation.dashboard.DashboardView dashboardView = new hospital.presentation.dashboard.DashboardView();
         hospital.presentation.dashboard.Model dashboardModel = new hospital.presentation.dashboard.Model();
         hospital.presentation.dashboard.Controller dashboardController =
@@ -130,7 +146,7 @@ public class Sesion implements ThreadListener {
         dashboardView.setModel(dashboardModel);
         tabbedPane.addTab("Dashboard", dashboardView.getDashboardPanel());
 
-        // Histórico
+        // MVC de historico
         hospital.presentation.historico_recetas.HistoricoRecetasView historicoRecetasView =
                 new hospital.presentation.historico_recetas.HistoricoRecetasView();
         hospital.presentation.historico_recetas.Model historicoRecetaModel =
@@ -141,16 +157,14 @@ public class Sesion implements ThreadListener {
     }
 
     public void addMedicoTabs(JTabbedPane tabbedPane) {
-        // Prescripción
-        hospital.presentation.prescripcion.PrescripcionView prescripcionView =
-                new hospital.presentation.prescripcion.PrescripcionView();
-        hospital.presentation.prescripcion.Model prescripcionModel =
-                new hospital.presentation.prescripcion.Model();
+        // MVC de prescripcion
+        hospital.presentation.prescripcion.PrescripcionView prescripcionView = new hospital.presentation.prescripcion.PrescripcionView();
+        hospital.presentation.prescripcion.Model prescripcionModel = new hospital.presentation.prescripcion.Model();
         hospital.presentation.prescripcion.Controller prescripcionController =
                 new hospital.presentation.prescripcion.Controller(prescripcionView, prescripcionModel);
         tabbedPane.addTab("Prescripcion", prescripcionView.getPrescripcionPanel());
 
-        // Dashboard
+        // MVC de dashboard
         hospital.presentation.dashboard.DashboardView dashboardViewMed = new hospital.presentation.dashboard.DashboardView();
         hospital.presentation.dashboard.Model dashboardModelMed = new hospital.presentation.dashboard.Model();
         hospital.presentation.dashboard.Controller dashboardControllerMed =
@@ -159,7 +173,7 @@ public class Sesion implements ThreadListener {
         dashboardViewMed.setModel(dashboardModelMed);
         tabbedPane.addTab("Dashboard", dashboardViewMed.getDashboardPanel());
 
-        // Histórico
+        // MVC de historico
         hospital.presentation.historico_recetas.HistoricoRecetasView historicoRecetasViewMed =
                 new hospital.presentation.historico_recetas.HistoricoRecetasView();
         hospital.presentation.historico_recetas.Model historicoRecetaModelMed =
@@ -170,13 +184,13 @@ public class Sesion implements ThreadListener {
     }
 
     public void addFarmaceutaTabs(JTabbedPane tabbedPane) {
-        // Despacho
+        // MVC de despacho
         DespachoView despachoView = new DespachoView();
         hospital.presentation.despacho.Model despachoModel = new hospital.presentation.despacho.Model();
         this.despachoController = new hospital.presentation.despacho.Controller(despachoView, despachoModel);
         tabbedPane.addTab("Despacho", despachoView.getDespachoView());
 
-        // Dashboard
+        // MVC de dashboard
         hospital.presentation.dashboard.DashboardView dashboardViewFar = new hospital.presentation.dashboard.DashboardView();
         hospital.presentation.dashboard.Model dashboardModelFar = new hospital.presentation.dashboard.Model();
         hospital.presentation.dashboard.Controller dashboardControllerFar =
@@ -185,7 +199,7 @@ public class Sesion implements ThreadListener {
         dashboardViewFar.setModel(dashboardModelFar);
         tabbedPane.addTab("Dashboard", dashboardViewFar.getDashboardPanel());
 
-        // Histórico
+        // MVC de historico
         hospital.presentation.historico_recetas.HistoricoRecetasView historicoRecetasViewFar =
                 new hospital.presentation.historico_recetas.HistoricoRecetasView();
         hospital.presentation.historico_recetas.Model historicoRecetaModelFar =
@@ -206,22 +220,21 @@ public class Sesion implements ThreadListener {
         mainWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mainWindow.setTitle("Hospital" + " " + user.getNombre() + " " + user.getId());
 
-        // Tabs principales (izquierda)
+        // Tabs principales a la izquierda
         JTabbedPane tabbedPane = new JTabbedPane();
         switch (user.getTipo()) {
             case "ADMINISTRADOR": addAdminTabs(tabbedPane); break;
-            case "MEDICO":        addMedicoTabs(tabbedPane); break;
-            case "FARMACEUTA":    addFarmaceutaTabs(tabbedPane); break;
+            case "MEDICO": addMedicoTabs(tabbedPane); break;
+            case "FARMACEUTA": addFarmaceutaTabs(tabbedPane); break;
         }
 
-        // Usuarios SIEMPRE visible (derecha)
-        JComponent usuariosPanel = buildUsuariosSidePanel();
+        // Panel de usuarios siempre visible a la derecha
+        JComponent panelUsuarios = construirPanelUsuarios();
 
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, usuariosPanel);
-        split.setResizeWeight(1.0);          // da prioridad de tamaño a la parte izquierda
-        split.setDividerLocation(900);       // posición inicial del divisor
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, panelUsuarios);
+        split.setResizeWeight(1.0);      // prioriza ancho para los tabs
+        split.setDividerLocation(900);   // posición inicial del divisor
         split.setContinuousLayout(true);
-        split.setOneTouchExpandable(false);
 
         mainWindow.setContentPane(split);
         mainWindow.setLocationRelativeTo(null);
@@ -229,18 +242,25 @@ public class Sesion implements ThreadListener {
         mainWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try { Service.instance().logout(); } catch (Exception ex) { }
+                try {
+                    Service.instance().logout();
+                } catch (Exception ex) {
+                }
                 Service.instance().stop();
-                if (latch != null) latch.countDown();
+                if (latch != null) {
+                    latch.countDown();
+                }
                 System.exit(0);
             }
         });
-
         mainWindow.setVisible(true);
     }
 
     public void cerrarSesion() {
-        try { Service.instance().logout(); } catch (Exception e) { }
+        try {
+            Service.instance().logout();
+        } catch (Exception e) {
+        }
         this.usuarioActual = null;
     }
 }
