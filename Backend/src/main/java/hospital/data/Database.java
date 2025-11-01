@@ -17,18 +17,15 @@ public class Database {
         return theInstance;
     }
 
-    // --- CAMBIOS CLAVE AQUÍ ---
+    // --- CAMBIOS CLAVE AQUI ---
     // Ya no mantenemos una conexión única.
-    // private Connection cnx; // ELIMINAR ESTA LÍNEA
 
     public Database(){
-        // El constructor ahora está vacío.
     }
 
     public Connection getConnection(){
         try {
             Properties prop = new Properties();
-            // La ruta del archivo de propiedades es relativa al classpath
             InputStream stream = getClass().getClassLoader().getResourceAsStream("database.properties");
 
             if (stream == null) {
@@ -57,31 +54,4 @@ public class Database {
         }
     }
 
-    // Los siguientes métodos ya no son necesarios porque los DAOs manejarán sus propias conexiones.
-    // Puedes eliminarlos o dejarlos si los usas en otro lugar, pero la práctica correcta
-    // es que cada DAO gestione su ciclo de vida de PreparedStatement.
-    /*
-    public PreparedStatement prepareStatement(String statement) throws SQLException {
-        // Este método se vuelve problemático sin una conexión única.
-        // Se recomienda manejar los PreparedStatements en los DAOs.
-        throw new UnsupportedOperationException("Obtenga una conexión y prepare el statement en el DAO.");
-    }
-
-    public int executeUpdate(PreparedStatement statement) {
-        try {
-            return statement.getUpdateCount();
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public ResultSet executeQuery(PreparedStatement statement){
-        try {
-            return statement.executeQuery();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-    */
 }

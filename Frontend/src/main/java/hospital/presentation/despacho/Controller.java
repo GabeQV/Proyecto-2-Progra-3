@@ -4,6 +4,7 @@ import hospital.logic.Receta;
 import hospital.logic.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Controller {
     DespachoView view;
@@ -50,8 +51,9 @@ public class Controller {
 
         if ("En proceso".equalsIgnoreCase(estado)) r.setEstado("Confeccionado");
         else if ("Lista".equalsIgnoreCase(estado)) r.setEstado("En proceso");
-        else if ("Entregada".equalsIgnoreCase(estado)) r.setEstado("Lista");
-        else throw new Exception("No hay estado anterior para revertir");
+        else if (Objects.equals(r.getEstado(), "Entregada")){
+            throw new Exception("La receta ya fué entregada");
+        }
 
         Service.instance().updateReceta(r);
     }
