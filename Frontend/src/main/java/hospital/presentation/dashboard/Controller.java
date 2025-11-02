@@ -1,5 +1,6 @@
 package hospital.presentation.dashboard;
 
+import hospital.logic.Medicamento;
 import hospital.logic.Receta;
 import hospital.logic.Service;
 
@@ -36,5 +37,21 @@ public class Controller {
             System.err.println("Error al buscar recetas para el dashboard: " + e.getMessage());
             model.setList(Collections.emptyList());
         }
+    }
+
+    public List<String> eliminarMedicamento(String nombre, List<String> medicamentosSeleccionados) {
+        if (medicamentosSeleccionados == null || medicamentosSeleccionados.isEmpty()) {
+            return medicamentosSeleccionados == null ? List.of() : List.copyOf(medicamentosSeleccionados);
+        }
+
+        if (nombre == null || nombre.isEmpty()) {
+            return List.copyOf(medicamentosSeleccionados);
+        }
+
+        List<String> nueva = medicamentosSeleccionados.stream()
+                .filter(n -> !n.equals(nombre))
+                .collect(Collectors.toList());
+
+        return Collections.unmodifiableList(nueva);
     }
 }

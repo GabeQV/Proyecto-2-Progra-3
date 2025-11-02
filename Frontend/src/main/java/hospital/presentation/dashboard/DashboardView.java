@@ -2,7 +2,6 @@ package hospital.presentation.dashboard;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import hospital.logic.Medicamento;
-import hospital.logic.Receta;
 import hospital.logic.Service;
 
 import javax.swing.*;
@@ -13,7 +12,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DashboardView extends JPanel implements PropertyChangeListener  {
@@ -28,6 +26,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener  {
     private DatePicker desdeDatePicker;
     private JPanel lineChartPanel;
     private JPanel pieChartPanel;
+    private JButton eliminarButton;
     LineChart lineChart;
     PieChart pieChart;
 
@@ -70,6 +69,16 @@ public class DashboardView extends JPanel implements PropertyChangeListener  {
         });
 
         filtrarButton1.addActionListener(e -> actualizarVista());
+
+        eliminarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> nuevaLista = controller.eliminarMedicamento((String) medicamentosComboBox.getSelectedItem(), medicamentosSeleccionados);
+                medicamentosSeleccionados.clear();
+                medicamentosSeleccionados.addAll(nuevaLista);
+                actualizarVista();
+            }
+        });
     }
 
     private void actualizarVista() {

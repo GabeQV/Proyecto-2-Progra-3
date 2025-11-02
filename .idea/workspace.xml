@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="56592d18-d783-4df6-9dd0-3a05744a0546" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/hospital/data/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/LineChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/LineChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/despacho/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.form" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main/java/hospital/presentation/dashboard/DashboardView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +127,7 @@
       <workItem from="1761797972573" duration="88000" />
       <workItem from="1761798074000" duration="2698000" />
       <workItem from="1761870538387" duration="10121000" />
-      <workItem from="1762038677756" duration="1254000" />
+      <workItem from="1762038677756" duration="2850000" />
     </task>
     <servers />
   </component>
